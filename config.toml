@@ -1,6 +1,6 @@
 languageCode = "zh_cn"
 title = "诗与胡说"
-baseURL = "https://kylingit.github.io/"
+baseURL = "https://kylingit.com/"
 theme = "cocoa-eh"
 builddrafts = true
 canonifyurls = true
