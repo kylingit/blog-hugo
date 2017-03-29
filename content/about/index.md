@@ -5,7 +5,7 @@ comments: false
 <script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
 
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=800 height=86 src="//music.163.com/outchain/player?type=2&id=18094919&auto=0&height=66"></iframe>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=800 height=86 src="https://music.daoapp.io/iframe?song=18094919&qssl=1&qnarrow=0&autoplay=0"></iframe>
 
 # 诗与胡说，一个孤独散步者的梦
 

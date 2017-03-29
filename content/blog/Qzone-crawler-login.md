@@ -1,9 +1,12 @@
 ---
 title: QQ 空间爬虫之模拟登录
-date: 2017-03-22 14:48:15
+date: 2017-03-24 14:48:15
 tags: [Python, Mysql, Qzone, crawler]
 categories: Coding
 ---
+
+<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+
 想要抓取 QQ 空间数据的第一步就是登录空间，通过好友关系获取说说，日志，留言等。
 
 话说 QQ 空间登录算法好变态...4000+ 行 [js](https://qzonestyle.gtimg.cn/c/=/qzone/v8/engine/migrate-plugin.js,/qzone/v8/engine/console-plus/console-plus.js,/qzone/v8/engine/request/request_61221.js,/qzone/v8/core/interface_mini.js) 加密，想要读懂该算法也是需要耗费大段时间，好在 github 上有大神实现了该算法，感谢 [gera2ld](https://github.com/gera2ld) 大神提供的登录库，为我们省去了大量时间，详情戳 [qqlib](https://github.com/gera2ld/qqlib)
@@ -99,7 +102,7 @@ https://h5.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/user/cgi_personal_ca
 #### 6. 后续
 这样我们有了可用的 cookies ，从 cookies 计算`g_tk`值，有了`g_tk`和好友 qq 号就可以拼接 url 批量获取好友数据了~
 
-
+<script>pangu.spacingPage();</script>
 
 
 
