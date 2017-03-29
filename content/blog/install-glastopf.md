@@ -6,7 +6,7 @@ categories: Coding
 ---
 <script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
 
-glastopf是一个开源的低交互式Web应用蜜罐，用python编写，可以在各种操作系统上部署，可以方便监控和捕获恶意文件样本，攻击方式等，后期也有开源脚本利于统计分析，同时方便安装配置。 
+`glastopf`是一个开源的低交互式Web应用蜜罐，用python编写，可以在各种操作系统上部署，可以方便监控和捕获恶意文件样本，攻击方式等，后期也有开源脚本利于统计分析，同时方便安装配置。 
  
 ### 项目地址
 > https://github.com/mushorg/glastopf 

@@ -61,7 +61,7 @@ def metric_init(params):
 def metric_cleanup():
 def metric_handler(name):
 ```
-前面两个方法的名字必须是一定的，最后一个 metric_handler可以任意命名，具体可以看example
+前面两个方法的名字必须是一定的，最后一个`metric_handler`可以任意命名，具体可以看example
 ```
 import random
 descriptors = list()
