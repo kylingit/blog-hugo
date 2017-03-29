@@ -1,0 +1,30 @@
+<!-- CSS -->
+
+<link rel="stylesheet" href="{{ .Site.BaseURL }}css/main.v0.9.1.css">
+<link rel="stylesheet" href="{{ .Site.BaseURL }}css/ionicons.min.css">
+
+{{ if .Site.Params.highlightjs }}
+  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/highlight.min.css">
+{{ end }}
+
+{{ if .Site.Params.progressively }}
+  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/progressively.min.css">
+{{ end }}
+
+{{ range .Site.Params.extracssfiles }}
+  <link rel="stylesheet" href="{{ . | absURL }}">
+{{ end }}
+
+<!-- Icon -->
+<link rel="shortcut icon"
+{{ if .Site.Params.faviconfile }}
+    href="{{ .Site.Params.faviconfile | absURL }}"
+{{ else }}
+    href="{{ .Site.BaseURL }}img/favicon.ico"
+{{ end }}
+>
+
+<!-- RSS -->
+{{ if .RSSLink }}
+  <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+{{ end }}

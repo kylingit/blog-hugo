@@ -1,0 +1,28 @@
+{{ partial "header.html" . }}
+
+<section class="main post non-narrow zero-top-spacing">
+    <div class="container">
+        <div class="content">
+            <div class="front-matter">
+                <div class="title-container">
+                    {{ partial "page-heading" . }}
+                </div>
+                <div class="meta">
+                    <div class="date" title="{{ .Date.Format .Site.Params.dateformfull }}">{{ .Date.Format .Site.Params.dateform }}</div>
+                    <div class="reading-time"><div class="middot"></div>{{ if eq 1 .ReadingTime }}{{ .ReadingTime }} minute read{{ else }}{{ .ReadingTime }} minutes read{{ end }}</div>
+                </div>
+            </div>
+            <div class="markdown">
+                {{ partial "content" . }}
+                <br>
+                <p><a href="{{ .Section | absURL }}">Back to posts</a></p>
+            </div>
+            <br>
+            <div class="disqus">
+                {{ template "_internal/disqus.html" . }}
+            </div>
+        </div>
+    </div>
+</section>
+
+{{ partial "footer.html" . }}
