@@ -11,14 +11,14 @@ categories: Coding
 
 <!-- more -->
 
-##### 1. 重新克隆一个repo
+### 1. 重新克隆一个repo
 
 ```
 git clone --bare https://github.com/user/repo.git
 cd repo.git
 ```
 
-##### 2. 新建一个脚本
+### 2. 新建一个脚本
 
 ```
 #!/bin/sh
@@ -39,21 +39,25 @@ fi
 ' --tag-name-filter cat -- --branches --tags
 ```
 
-##### 3. 更改旧的邮箱，以及填写正确的用户名和邮箱，执行
+### 3. 更改旧的邮箱，以及填写正确的用户名和邮箱，执行
 
-##### 4. 把正确历史 push 到 Github
+### 4. 把正确历史 push 到 Github
 
 ```
 git push --force --tags origin 'refs/heads/*'
 ```
 
-##### 5. 查看`git log` 检查push历史是否被更正，没有错误的话就可以删掉这个clone了
+### 5. 查看`git log` 检查push历史是否被更正，没有错误的话就可以删掉这个clone了
 
-##### 6. done
+### 6. done
+
 
 参考:
+
 1. [Changing author info](https://help.github.com/articles/changing-author-info/)
 
 2. [为什么Github没有记录你的Contributions](https://segmentfault.com/a/1190000004318632)
+
+
 
 <script>pangu.spacingPage();</script>

@@ -5,6 +5,7 @@ tags: Python
 categories: Coding
 ---
 <script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+
 ## 主体思想
 
      1. 批量获取验证码 
@@ -15,7 +16,7 @@ categories: Coding
 
 <!-- more -->
 
-## 函数介绍m
+## 函数介绍
 
     download()      批量获取验证码  
     binary()        图像的去噪和二值化处理  

@@ -22,6 +22,8 @@ categories: Listening
 
 小心翼翼地听，小心翼翼地感受。
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=450 src="http://music.163.com/outchain/player?type=0&id=68958120&auto=0&height=430"></iframe>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=530 height=450 src="//music.163.com/outchain/player?type=1&id=10749&auto=0&height=430"></iframe>
+
+
 
 <script>pangu.spacingPage();</script>

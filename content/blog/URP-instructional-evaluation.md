@@ -7,7 +7,7 @@ categories: Coding
 <script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
 
 ## 简述
-夏天到了，又到了~~繁殖~~评课的季节→_→
+夏天到了，又到了 ~~繁殖~~ 评课的季节→_→
 
 URP评课程序2.0，针对第二学期的情况作了一些修改，又可以欢乐地一键评课了~
 

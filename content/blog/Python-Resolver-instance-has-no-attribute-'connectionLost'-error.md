@@ -46,7 +46,7 @@ exceptions.AttributeError: Resolver instance has no attribute 'connectionLost'
 ```
 <!-- more -->
 
-查阅相关资料发现不是自己代码的问题，而是 Twisted 库中的 twisted.names.client.Resolver 类没有 connectionLost 方法，而这个方法本身并不需要做任何事，于是解决办法就是，找到 twisted.names.client.Resolver，在最后添加 connectionLost 方法：
+查阅相关资料发现不是自己代码的问题，而是 `Twisted` 库中的 `twisted.names.client.Resolver` 类没有 `connectionLost` 方法，而这个方法本身并不需要做任何事，于是解决办法就是，找到 `twisted.names.client.Resolver`，在最后添加 `connectionLost` 方法：
 ```
 def connectionLost(self, p):
     pass
@@ -63,6 +63,7 @@ Failure: twisted.names.error.DNSQueryTimeoutError:
 
 
 参考:
+
 > https://twistedmatrix.com/trac/ticket/5224
 > http://stackoverflow.com/questions/15944617/handle-error-on-a-simple-dns-twisted-client
 
