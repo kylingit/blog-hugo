@@ -55,6 +55,7 @@ git push --force --tags origin 'refs/heads/*'
 参考:
 
 1. [Changing author info](https://help.github.com/articles/changing-author-info/)
+
 2. [为什么Github没有记录你的Contributions](https://segmentfault.com/a/1190000004318632)
 
 

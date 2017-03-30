@@ -688,19 +688,25 @@ section.main .content .markdown h6 {
   margin-top: 1.75rem;
 }
 section.main .content .markdown h1 {
-  font-size: 1.75rem;
-  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  margin-bottom: 1.75rem;
 }
 section.main .content .markdown h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  margin-bottom: 1.4rem;
 }
 section.main .content .markdown h3 {
-  font-size: 1em;
-  margin-bottom: 1rem;
+  font-size: 1.3em;
+  margin-bottom: 1.3rem;
 }
-section.main .content .markdown h4,
-section.main .content .markdown h5,
+section.main .content .markdown h4{
+  font-size: 1.2em;
+  margin-bottom: 1.2rem;
+}
+section.main .content .markdown h5{
+  font-size: 1.1em;
+  margin-bottom: 1.1rem;
+}
 section.main .content .markdown h6 {
   font-size: 1rem;
   margin-bottom: 1rem;
