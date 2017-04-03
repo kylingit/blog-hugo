@@ -54,7 +54,7 @@ https://h5.qzone.qq.com/proxy/domain/m.qzone.qq.com/cgi-bin/new/get_msgb?uin=登
 
 呃...其实关键的是我们最好找到一个通用的接口，根据这个接口返回的状态做一次判断，这样就能在所有子模块中决定是否对这个好友继续爬取数据，那这个接口是什么呢？
 
-再上次[获取好友信息](https://kylingit.com/blog/qq-%E7%A9%BA%E9%97%B4%E7%88%AC%E8%99%AB%E4%B9%8B%E8%8E%B7%E5%8F%96%E5%A5%BD%E5%8F%8B/)的那部分中，有一步是根据qq获取[详细信息](https://kylingit.com/blog/qq-%E7%A9%BA%E9%97%B4%E7%88%AC%E8%99%AB%E4%B9%8B%E8%8E%B7%E5%8F%96%E5%A5%BD%E5%8F%8B/#详细信息)，这个详细信息的获取是有好友权限的，不然就可以得到任意qq的信息了...扯远了，好友权限意味着你必须可以访问ta的空间，这对于设置了访问限制的好友也是一样的，我们同样无法获取到被限制访问的好友的具体信息，于是我们可以再次利用这个接口
+在上次[获取好友信息](https://kylingit.com/blog/qq-%E7%A9%BA%E9%97%B4%E7%88%AC%E8%99%AB%E4%B9%8B%E8%8E%B7%E5%8F%96%E5%A5%BD%E5%8F%8B/)的那部分中，有一步是根据qq获取[详细信息](https://kylingit.com/blog/qq-%E7%A9%BA%E9%97%B4%E7%88%AC%E8%99%AB%E4%B9%8B%E8%8E%B7%E5%8F%96%E5%A5%BD%E5%8F%8B/#详细信息)，这个详细信息的获取是有好友权限的，不然就可以得到任意qq的信息了...扯远了，好友权限意味着你必须可以访问ta的空间，这对于设置了访问限制的好友也是一样的，我们同样无法获取到被限制访问的好友的具体信息，于是我们可以再次利用这个接口
 
 ```
 https://h5.qzone.qq.com/proxy/domain/base.qzone.qq.com/cgi-bin/user/cgi_userinfo_get_all?uin=qq&fupdate=1&outCharset=utf-8&g_tk=g_tk
