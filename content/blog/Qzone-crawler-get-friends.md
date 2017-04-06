@@ -169,7 +169,11 @@ create_tb_sql = 'CREATE TABLE IF NOT EXISTS %s\
 ```
 这里建表最后的`ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`需要解释一下，因为有好多好友的昵称，签名等都是含有emoji表情的，emoji虽然也有编码，但它是用4字节来存储的，而 MySQL 中 utf8 的字段只能存储 1 至 3 字节的字符，所有直接存储会出错，这里就在建表的时候设置表的编码格式为`utf8mb4`，该编码是`utf8`的超集，向下兼容`utf8`，可以参考前阵子写的文章 [PYTHON 使用 MYSQL 存储 EMOJI 表情](https://kylingit.com/blog/python-%E4%BD%BF%E7%94%A8-mysql-%E5%AD%98%E5%82%A8-emoji-%E8%A1%A8%E6%83%85/)
 
-字段含义就不用解释了，注意一下的是`birthday`字段是拼接出生年份和具体月日的，就不细分了，`city`字段拼接国家省份和城市
+字段含义就不用解释了，注意一下的是`birthday`字段是拼接出生年份和具体月日的，就不细分了，`city`字段拼接国家省份和城市。`sex`字段为`0`的表示无法获取该好友的信息
+
+预览
+
+![qq friends](https://ob5vt1k7f.qnssl.com/DNYkv)
 
 ### 结束语
 看似普通的get访问，用request方便又轻松，实际上背后有很多坑...比如说有些上个年代遗留的火星文...又比如说各种有意无意在签名中啊说说中啊等带各种"特殊字符"的，不做过滤直接让程序逼停...

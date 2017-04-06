@@ -105,6 +105,10 @@ create_tb_sql = 'CREATE TABLE IF NOT EXISTS %s\
 
 可以注意到在`qq_messages`中多了一个`replyFlag`字段，这个字段是自己加的，用来区分该留言有没有回复，这是根据`replyList`是否为空来判断的
 
+预览
+
+![qq messages](https://ob5vt1k7f.qnssl.com/cIIY1)
+
 - `qq_messages_reply`结构
 
 ```
@@ -119,6 +123,11 @@ create_tb_sql = 'CREATE TABLE IF NOT EXISTS %s\
 ```
 回复表跟上面差不多，就不解释了
 
+预览
+
+![qq message reply](https://ob5vt1k7f.qnssl.com/5pPWS)
+
+插入数据的时候根据回复数插入空值，使看上去有层次关系
 
 ### 结束语
 剩下的就是一些小细节了，比如说私密留言获取不到留言者的`uin`以及具体的内容，而表的字段已经固定了，无法正确插入怎么办呢？
