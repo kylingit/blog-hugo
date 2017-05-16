@@ -6,7 +6,9 @@ categories: Writing
 ---
 <script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
 
-
+* * *
+阿廖沙，不要怕！火车在上面停下啦！他一笑天就亮啦！
+<div align = right>2017-05-16</div>
 * * *
 毕业设计  
 自然有很多人是没有去实习的，理所当然也就没有实习经历  
