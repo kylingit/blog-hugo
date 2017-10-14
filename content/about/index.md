@@ -4,9 +4,10 @@ comments: false
 ---
 <script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
 
-
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=800 height=86 src="https://music.daoapp.io/iframe?song=18094919&qssl=1&qnarrow=0&autoplay=0"></iframe>
-
+<video width="100%" height="30" controls>
+<source src="http://m10.music.126.net/20171015002320/f3ca788dd03415b20c27666b7b81b26c/ymusic/4feb/c56c/657c/6139040fe04d289167c6dfff9adca2b5.mp3">
+</video>
+**My Back Pages** &nbsp; *Bob Dylan The 30th Anniversary Concert Celebration*
 # 诗与胡说，一个孤独散步者的梦
 
 - Student, 大三, 天天学习, 好好向上。
