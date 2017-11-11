@@ -4,6 +4,8 @@ date: 2017-10-12 12:54:29
 tags: [vul,sec]
 categories: Security
 ---
+<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+
 昨天复现了一个 Microsoft Office Word 的一个执行任意代码的姿势，跟之前爆出的两个CVE (CVE-2017-0199, CVE-2017-8759) 可以组成三板斧，这里简单记录一下
 
 在不启用宏的情况下执行任意程序，按照复现过程来看这确实像是一个功能而不是 bug，微软也表示不会修复这个“漏洞”。这个功能的本意是为了更方便地在 word 里同步更新其它应用的内容，比如说在一个 word文档里引用了另一个excel表格里的某项内容，通过连接域 (Field) 的方式可以实现在 excel 里更新内容后 word 中同步更新的效果，问题出在这个域的内容可以是一个公式(或者说表达式)，这个公式并不限制内容，于是我们可以这样，`ctrl+f9`插入一个域，在`{}`之间写入代码：
@@ -75,3 +77,6 @@ MERGEBARCODE
 
 参考：
 https://sensepost.com/blog/2017/macro-less-code-exec-in-msword/
+
+
+<script>pangu.spacingPage();</script>
