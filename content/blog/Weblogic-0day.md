@@ -94,7 +94,8 @@ docker-compose up -d
 
 `http://x.x.x.x:7001/bea_wls_internal/a.jsp`
 	
-<!--
+#### 0x04 RMI 利用
+
 导师还给出了rmi调用执行的方式，可惜我对rmi机制还没研究透彻，没有构造出来利用的流程，先把PoC放在这儿:
 ```
     <java version="1.8.0_131" class="java.beans.XMLDecoder">
@@ -108,11 +109,11 @@ docker-compose up -d
     </void>
     </java>
 ```
--->
+更新：研究了一下rmi利用，更新在了[这里](https://kylingit.com/blog/weblogic-xmldecoder-rce%E4%B9%8Brmi%E5%88%A9%E7%94%A8/)
 
 目前看到PoC的变换还有好几种，甚至出现了绕过官方补丁的版本，后续应该会逐渐放出的。
 
-#### 0x04 修补方案
+#### 0x05 修补方案
 1.安装Oracle 10月份最新补丁
 
 2.删除或重命名WebLogic目录中以下war包及目录
@@ -123,9 +124,10 @@ rm -rf /home/WebLogic/Oracle/Middleware/user_projects/domains/base_domain/server
 ```
 访问`wls-wsat`响应404即可
 
-#### 0x05 
+#### 0x06 
 附
 Github上[3xp10it/exploit](https://github.com/3xp10it/exploit/blob/cbc8d61859b9c4c312bb52225671831b895fdbc3/exps/weblogic/weblogic.py)仓库删除的脚本
 [Weblogic.py](https://ob5vt1k7f.qnssl.com/weblogic.py)
+
 
 <script>pangu.spacingPage();</script>
