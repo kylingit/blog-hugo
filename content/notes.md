@@ -7,6 +7,10 @@ categories: Writing
 <script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
 
 * * *
+不知道为什么首页文章排序不按照发布日期排序，而且如果发布时间是当天的话无法生成html页面，需要把时间往前改才行，很奇怪
+<div align = right>2018-01-12</div>
+* * *
+* * *
 阿廖沙，不要怕！火车在上面停下啦！他一笑天就亮啦！
 <div align = right>2017-05-16</div>
 * * *
