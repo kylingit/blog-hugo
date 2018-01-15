@@ -10,6 +10,7 @@ publishdir = "public"
 author = "kylinking"
 disqusshortname = "kylingit"
 pluralizelisttitles = false
+enableRobotsTXT = true
 
 [permalinks]
 blog = "blog/:slug/"
