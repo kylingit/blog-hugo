@@ -1,9 +1,11 @@
 ---
-title: DedeCMS V5.7 SP2第二处缺陷可重置管理员密码
+title: DedeCMS V5.7 SP2 第二处缺陷可重置管理员密码
 date: 2018-01-19 15:20:32
 tags: [vul,sec,dedecms]
 categories: Security
 ---
+<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+
 ### 0x01 概述
 上回分析的dede重置密码漏洞有一定局限性，一是只能影响没有设置密保问题的用户，二是不能重置管理员admin的密码，原因当时也说了，管理员信息存在另一个表`dede_admin`中，而且管理员默认不允许从前台登录，所以就算更改了`dede_member`里`admin`的密码也没法登录。但是前几天又有一个缺陷被爆出来，可以绕过一些判断条件从而从前台登录管理员账户，配合上一个重置密码漏洞，可以达到从前台修改`dede_admin`表里是密码，也就是真正修改了管理员密码。
 
@@ -161,5 +163,9 @@ if ( ! function_exists('PutCookie'))
 ### 0x04 总结
 还是判断不够严谨，这回有两处可导致判断条件的绕过，有时候一个漏洞影响力有限的时候也不能轻视，往往配合另一处缺陷就可以造成很大的危害
 
+参考：
+- https://xianzhi.aliyun.com/forum/topic/1961
+- https://xianzhi.aliyun.com/forum/topic/1959
 
 
+<script>pangu.spacingPage();</script>
