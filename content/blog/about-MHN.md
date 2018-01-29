@@ -18,15 +18,15 @@ categories: Coding
 
 - Conpot: http://conpot.org/
 
-- Kippo: https://github.com/desaster/kippo，它是一个中等交互的蜜罐，能够下载任意文件。 drops中有一篇介绍： http://drops.wooyun.org/papers/4578
+- Kippo: https://github.com/desaster/kippo, 它是一个中等交互的蜜罐，能够下载任意文件。 drops中有一篇介绍： http://drops.wooyun.org/papers/4578
 
-- Amun: http://amunhoney.sourceforge.net/，它是一个低交互式蜜罐，但是已经从2012年之后不在维护了。
+- Amun: http://amunhoney.sourceforge.net/, 它是一个低交互式蜜罐，但是已经从2012年之后不在维护了。
 
 - Glastopf： http://glastopf.org/
 
 - Wordpot： https://github.com/gbrindisi/wordpot
 
-- ShockPot： https://github.com/threatstream/shockpot，模拟的CVE-2014-6271，即破壳漏洞
+- ShockPot： https://github.com/threatstream/shockpot, 模拟的CVE-2014-6271，即破壳漏洞
 
 - p0f： https://github.com/p0f/p0f
 
@@ -55,14 +55,13 @@ MHN 的 HoneyMap 显示页面使用的是 3000 端口，控制页面运行在 80
 
 #### 三
 Map 页面就是显示的地图，这里一开始点击会显示说 404，需要在配置文件把页面地址更改一下
-> vim /opt/mhn/server/config.py
+`vim /opt/mhn/server/config.py`
 
-把 
-> HONEYMAP_URL = ':3000' 
+把
+`HONEYMAP_URL = ':3000' `
 
-改成 
-
-> HONEYMAP_URL = 'http://ip:3000'   
+改成
+`HONEYMAP_URL = 'http://ip:3000'`   
  
  ip 即为该服务器 ip
  
