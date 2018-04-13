@@ -1,5 +1,5 @@
 ---
-title: CVE-2018-7600 Drupal内核远程代码执行漏洞分析
+title: CVE-2018-7600 Drupal 内核远程代码执行漏洞分析
 date: 2018-04-13 23:05:34
 tags: [vul,sec,Drupal]
 categories: Security
@@ -21,6 +21,7 @@ https://www.drupal.org/project/drupal/releases
 
 #### 0x04 流程梳理
 先来理清一下Drupal处理表单的情况。更详细的可以看[文档](http://www.thinkindrupal.com/node/1100)
+
 > Drupal提供了一个应用程序接口（API），用来生成、验证和处理HTML表单。表单API将表单抽象为一个嵌套数组，里面包含了属性和值。在生成页面时，表单呈现引擎会在适当的时候将数组呈现出来。
 
 > 模块使用关联数组向Drupal描述表单。Drupal的表单引擎负责为要显示的表单生成HTML，并使用三个阶段来安全的处理提交了的表单：验证、提交、重定向。
