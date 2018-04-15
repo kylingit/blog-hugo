@@ -4,12 +4,8 @@ comments: false
 ---
 <script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
 
-<video width="100%" height="30" controls>
-<source src="http://isure.stream.qqmusic.qq.com/7129792.m4a?fromtag=52">
-</video>
-**My Back Pages** &nbsp; *Bob Dylan The 30th Anniversary Concert Celebration*
+<iframe src="https://open.spotify.com/embed/track/0bIGNGUqgpB82sAksxonkZ" width="750" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
 # 诗与胡说，一个孤独散步者的梦
-
 - Cuber Security
 - Reader, 王小波, 阿来, 大刘, 张佳玮, 乔治·R·R·马丁...
 - [Music lover](http://music.163.com/#/user/home?id=38234240), Neil Young, Bob Dylan, Guns N' Roses...
@@ -21,3 +17,5 @@ comments: false
 - 生活不能没有音乐，生活不能没有电影。生活更不能没有这辈子都不能错过的好书。
 
 <script>pangu.spacingPage();</script>
+
+
