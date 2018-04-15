@@ -80,7 +80,7 @@ Drupal比较特殊，它不像大部分cms通过html直接渲染页面，而是�
 可以看到我们构造的“子节点”被存储在`mail-value`下，如果要取出这个值就得让上面提到的`getValue()`接收这个参数，所以我们构造`element_parents=account/name/%23value`，这样子`getValue()`就会遍历出我们构造的参数
 
 现在参数已经能够传进去了，那么在哪里执行呢？继续往下跟
-```pytho
+```php
 $current_file_count = $form_state->get('file_upload_delta_initial');
 if (isset($form['#file_upload_delta']) && $current_file_count < $form['#file_upload_delta']) {
 	$form[$current_file_count]['#attributes']['class'][] = 'ajax-new-content';
