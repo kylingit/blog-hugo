@@ -8,6 +8,8 @@ categories: Writing
 
 * * *
 不知道为什么首页文章排序不按照发布日期排序，而且如果发布时间是当天的话无法生成html页面，需要把时间往前改才行，很奇怪
+
+事实证明是hugo版本导致的...换成0.19版本问题解决
 <div align = right>2018-01-12</div>
 * * *
 * * *
@@ -92,3 +94,5 @@ interesting。
 * * *
 
 <script>pangu.spacingPage();</script>
+
+
