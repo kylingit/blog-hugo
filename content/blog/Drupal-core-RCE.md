@@ -137,7 +137,7 @@ if (!$theme_is_implemented && isset($elements['#markup'])) {
 
 回头看一下这处`call_user_func_array`，这里的`$callable`和`$args`两个参数实际上也是可控的，通过`#lazy_builder`属性传进来，checkpoint的分析报告正是分析了这个地方
 
-![call_user_func_array](https://ob5vt1k7f.qnssl.com/QlR23)
+![call_user_func_array](https://ob5vt1k7f.qnssl.com/Gj3xu)
 
 #### 0x06 总结
 关注这个漏洞也是好长时间了，当时粗略看了一下，因为补丁直接对入口进行了过滤，要找到真正触发的地方太难了，所以也迟迟不见PoC出来。checkpoint的分析报告出来后好好跟了一遍，不得不感叹人家真厉害(逃...
