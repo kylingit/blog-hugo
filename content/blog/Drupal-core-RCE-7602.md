@@ -6,9 +6,7 @@ categories: Security
 ---
 
 #### 0x01 概述
-https://www.drupal.org/sa-core-2018-004
-
-这个漏洞是`CVE-2018-7600`的另一个利用点，两个漏洞原理是一样的
+4月25日，Drupal官方发布通告，Drupal Core 存在一个远程代码执行漏洞，影响 7.x 和 8.x 版本。据分析，这个漏洞是`CVE-2018-7600`的绕过利用，两个漏洞原理是一样的，通告还称，已经发现了这个漏洞和`CVE-2018-7600`的在野利用，详情请看 https://www.drupal.org/sa-core-2018-004
 
 #### 0x02 影响版本
 Drupal 6.x，7.x，8.x
@@ -102,7 +100,7 @@ if (isset($options['query']['q'])) {
 ```
 从q取出值赋给`$options['path']`，也就是a被覆盖了，这个时候的`$options['path']`就是我们传入的数组
 
-注意q的元素需要转义百分号，不然会被认为`q[`是一个值
+注意q的元素需要转义百分号，对`#`进行二次编码，以绕过`CVE-2018-7600`的补丁，不然在取值时会被认为`q[`是一个值
 
 ![options](https://ob5vt1k7f.qnssl.com/s4o7s)
 参数缓存进整个form后通过第二个请求取出，同样经过
