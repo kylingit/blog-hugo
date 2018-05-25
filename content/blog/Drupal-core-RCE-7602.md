@@ -5,7 +5,10 @@ tags: [vul,sec,Drupal]
 categories: Security
 ---
 
+<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+
 #### 0x01 概述
+
 4月25日，Drupal官方发布通告，Drupal Core 存在一个远程代码执行漏洞，影响 7.x 和 8.x 版本。据分析，这个漏洞是`CVE-2018-7600`的绕过利用，两个漏洞原理是一样的，通告还称，已经发现了这个漏洞和`CVE-2018-7600`的在野利用，详情请看 https://www.drupal.org/sa-core-2018-004
 
 #### 0x02 影响版本
@@ -133,15 +136,4 @@ https://github.com/drupal/drupal/commit/080daa38f265ea28444c540832509a48861587d0
 #### 0x07 总结
 总的来说这个漏洞是CVE-2018-7600的另一个利用点，只是入口方式不一样，最终执行点还是相同的，所以还是那句话，一旦参数可控并且没有经过正确的过滤，就很有可能出问题。
 
-
-
-
-
-
-
-
-
-
-
-
-
+<script>pangu.spacingPage();</script>

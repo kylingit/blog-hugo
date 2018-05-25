@@ -5,6 +5,8 @@ tags: [Django,Directory Traversal]
 categories: Security
 ---
 
+<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+
 最近审计代码过程中出现了没有正确处理url形成目录穿越，导致可以读取或下载任意文件的案例，过程很简单，由此却引发了和小伙伴的讨论，对风险的控制需要依赖框架本身还是必须从根本上规避风险点。下面就通过目录遍历漏洞的案例分析一下django的路由传参方式，以及在日常开发中如何避免此类风险。
 
 ### 0x01 示例代码
@@ -127,7 +129,7 @@ Django2.0的url虽然更改了写法，但依然向老版本兼容，兼容的�
 ### 0x03 断点分析
 我们从代码层面来看一下这几者的区别
 
-##### 1. `re_path('download/(?P<filename>.+)'`方式
+##### 1.`re_path('download/(?P<filename>.+)'`方式
 在`/Lib/site-packages/django/urls/conf.py`中定义了相关方法
 
 ![re_path()](https://ob5vt1k7f.qnssl.com/uPvF8)
@@ -265,4 +267,4 @@ DEFAULT_CONVERTERS = {
 
 
 
-
+<script>pangu.spacingPage();</script>

@@ -5,7 +5,10 @@ tags: [vul,sec,Drupal]
 categories: Security
 ---
 
+<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+
 #### 0x01 概述
+
 https://www.drupal.org/sa-core-2018-002
 
 #### 0x02 影响版本
@@ -153,7 +156,7 @@ if (!$theme_is_implemented && isset($elements['#markup'])) {
 
 
 
-
+<script>pangu.spacingPage();</script>
 
 
 
