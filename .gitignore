@@ -1,3 +1,6 @@
+# Default
+content/blog/assets/*
 public/
-.DS_Store
-content/.DS_Store
+test.txt
+# MacOS
+*/.DS_Store

