@@ -1,6 +1,6 @@
 # Default
-content/blog/assets/*
 public/
-test.txt
+content/blog/assets/*
+local.properties
 # MacOS
 */.DS_Store
