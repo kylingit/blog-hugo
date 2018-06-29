@@ -346,7 +346,7 @@ if (grep {$_ =~ /^\Q$hostmask\E$/i} @hostauth) {
 
 ![1528277061564](https://ob5vt1k7f.qnssl.com/1528277061564.png)
 
-在bot启动的时候，不会以自身的进程启动，而是在`sshd`，`apache`等进程中随机fork一个启动，fork失败则退出脚本，这样子非常隐蔽地隐藏了自身进程，随后在加入IRC服务器的过程中也会随机选择一个IRC版本号加入。
+在bot启动的时候，不会以自身的进程启动，而是在`sshd`，`apache`等进程中随机fork一个启动，fork失败则退出脚本，这样子非常隐蔽地隐藏了自身进程，随后在加入IRC频道的过程中也会随机选择一个IRC版本号加入。
 
 在运行Perl IrcBot后，脚本选择以`/usr/sbin/cron`的进程启动，而且可以明显看到CPU占用达到100%，脚本潜伏在正常进程中很难被发现。
 
@@ -357,3 +357,7 @@ if (grep {$_ =~ /^\Q$hostmask\E$/i} @hostauth) {
 ## 0x04 总结
 
 这两款IRC bot在互联网上已经存在很久了，最近被广泛利用的Drupal RCE漏洞和Weblogic XMLDecoder反序列化漏洞使此类基于IRC协议的恶意脚本重新流行起来，根据在线文件分享平台[pastebin](https://pastebin.com/search?q=ircbot)查询相关脚本也不在少数，而且存在多种语言版本的IRC bot，黑客直接通过各种远程漏洞植入样本，接受C&C控制，具有很大的危害性。
+
+
+
+<script>pangu.spacingPage();</script>
