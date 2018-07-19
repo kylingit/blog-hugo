@@ -6,6 +6,20 @@ categories: Security
 ---
 <script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
 
+近日，Gitea 1.4.0版本的`LFS`模块出现了一个绕过登录验证未授权创建LFS对象的漏洞，由此漏洞引申出了一条非常漂亮的攻击链，值得好好学习。
+
+### 0x00 基本介绍
+
+官网地址 https://gitea.io/en-us/
+
+> Gitea is a community managed [fork](https://blog.gitea.io/2016/12/welcome-to-gitea/) of [Gogs](https://gogs.io/), lightweight code hosting solution written in [Go](https://golang.org/) and published under the [MIT](https://github.com/go-gitea/gitea/blob/master/LICENSE) license.
+
+Git LFS 介绍 
+
+> Git 大文件存储（Large File Storage，简称LFS）目的是更好地把大型二进制文件，比如音频文件、数据集、图像和视频等集成到 Git 的工作流中。我们知道，Git 存储二进制效率不高，因为它会压缩并存储二进制文件的所有完整版本，随着版本的不断增长以及二进制文件越来越多，这种存储方案并不是最优方案。而 LFS 处理大型二进制文件的方式是用文本指针替换它们，这些文本指针实际上是包含二进制文件信息的文本文件。文本指针存储在 Git 中，而大文件本身通过HTTPS托管在Git LFS服务器上。 
+
+本次漏洞是出现在`Gitea`的`LFS`处理逻辑中，在进行权限验证的时候少了一行`return`语句，以至于即使在`401 Unauthorized`的时候依旧能够进行后续的操作，这是整个漏洞的导火索。
+
 ### 0x01 环境搭建
 
 使用docker搭建漏洞环境，`Gitea`版本1.4.0
@@ -75,7 +89,7 @@ func requireAuth(ctx *context.Context) {
 }
 ```
 
-问题出在`PostHandler()`方法，该方法的作用是创建一个新的`LFS`对象。在`requireAuth`处，如果权限验证失败，则执行`requireAuth ()`，返回`401认证失败`，关键是`requireAuth(ctx)`结束之后没有`return`，也就是说虽然返回`401`但是不影响后面的逻辑接着执行，因此可以创建任意LFS对象，此处存在一个权限绕过漏洞。
+问题出在`PostHandler()`方法，该方法的作用是创建一个新的`LFS`对象。在`requireAuth`处，如果权限验证失败，则执行`requireAuth ()`，返回`401认证失败`，关键是`requireAuth(ctx)`结束之后没有`return`，也就是说虽然返回`401`但是不影响后面的逻辑接着执行，因此可以创建任意`LFS`对象，此处存在一个权限绕过漏洞。
 
 ### 0x03  目录穿越&任意文件读取
 
@@ -294,7 +308,16 @@ func (s *ContentStore) Put(meta *models.LFSMetaObject, r io.Reader) error {
 
 接着考虑第二个问题，如何利用`.tmp`文件？
 
-在`Gitea`可以配置存储session的方式，默认是保存为文件，存储路径在`/data/gitea/sessions`。于是我们可以想到把上面生成的session内容写入到一个`.tmp`文件，并保存在session目录下，这个tmp文件名即为`sessionid`，然后利用条件竞争，在文件未被删除之前带上这个`sessionid`，就可以登录成功。
+在`Gitea`可以配置存储session的方式，默认是保存为文件，存储路径在`/data/gitea/sessions`。
+
+```
+//app.ini
+[session]
+PROVIDER_CONFIG = /data/gitea/sessions
+PROVIDER        = file
+```
+
+于是我们可以想到把上面生成的session内容写入到一个`.tmp`文件，并保存在session目录下，这个tmp文件名即为`sessionid`，然后利用条件竞争，在文件未被删除之前带上这个`sessionid`，就可以登录成功。
 
 `Gitea`使用的session模块是[go-macaron/session](https://github.com/go-macaron/session)，在`file.go`可以看到几个关键的方法
 
@@ -338,7 +361,7 @@ func (p *FileProvider) filepath(sid string) string {
 
 我们来分析一个认证成功的session`/data/gitea/sessions/0/9/09cfb25c946d6187`，前两位为路径名，后面为sid，共同组成一个session文件
 
-我们使用相应的`DecodeGob()`方法来解开看一下session里包含的内容，其中`session_data`即是文件的hex内容。代码如下
+我们使用相应的`DecodeGob()`方法(vendor/github.com/go-macaron/session/utils.go:47)来解开看一下session里包含的内容，其中`session_data`即是`session`文件的hex内容。代码如下
 
 ```go
 package main
@@ -376,6 +399,8 @@ func main() {
 ![1531898336305](https://ob5vt1k7f.qnssl.com/1531898336305.png)
 
 可以看到主要是以`_old_iod` `uid` `uname`三个值组成的session内容，那么我们就可以构造一组这样的值来伪造一个session
+
+`[uid:1 uname:admin123 _old_uid:1]`
 
 生成session使用`EncodeGob()`方法：
 
