@@ -4,7 +4,7 @@ date: 2016-07-30 14:32:18
 tags: Ganglia
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 Ganglia支持很多模块的扩展，这里介绍python模块的扩展
 

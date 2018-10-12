@@ -4,7 +4,7 @@ date: 2016-06-05 22:59:18
 tags: Python
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 ## 主体思想
 

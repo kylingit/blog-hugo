@@ -5,7 +5,7 @@ tags: [vul,sec,Modx]
 categories: Security
 ---
 
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 ### 0x01 概述
 
@@ -21,7 +21,7 @@ categories: Security
 
 漏洞发生在`phpthumb`模块，该模块的作用是提供缩略图对象
 
-![1532080364911](https://ob5vt1k7f.qnssl.com/1532080364911.png)
+![1532080364911](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1532080364911.png)
 
 当我们把光标放到文件系统中的图片上的时候，可以看到弹出了图片的缩略图，此时就调用了`phpthumb`接口
 
@@ -170,7 +170,7 @@ if (empty($siteId) && (!defined('MODX_REQP') || MODX_REQP === TRUE)) {
 
 在这个库中也有`phpThumb`的相关方法，而且同样有缓存机制，不出意外同样存在任意文件写入漏洞，但是这个方法稍微复杂一些，它把文件写入cache目录，而文件名经过了一个array的反序列化再MD5，这样即使我们能写入文件，却猜不到文件名，因此a2u给出的PoC也没能直接写入文件，而是通过返回包来判断是否存在漏洞。但是经过分析，实际上我们是可以往缓存目录写入一个shell的，而且能够知道保存的文件名，下面来分析一下如何绕过这个看似复杂的流程。
 
-![1532596628836](https://ob5vt1k7f.qnssl.com/1532596628836.png)
+![1532596628836](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1532596628836.png)
 
 当利用插件上传图片的时候，如果图库中已经有图片，我们就可以看到一张缩略图，请求类似这样
 
@@ -265,7 +265,7 @@ echo md5($seri);
 
 最终会在缓存目录`assets/components/gallery/cache`写入文件`http.f23566b3b11f5fd29a8189b74ef53daf.php`
 
-![1532601619133](https://ob5vt1k7f.qnssl.com/1532601619133.png)
+![1532601619133](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1532601619133.png)
 
 
 
@@ -273,7 +273,7 @@ echo md5($seri);
 
 https://github.com/modxcms/revolution/pull/13979/
 
-![1532602450085](https://ob5vt1k7f.qnssl.com/1532602450085.png)
+![1532602450085](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1532602450085.png)
 
 补丁主要是对可传入的参数进行了限制，只允许公共参数(public parameters)，这样就避免了直接传入私有参数改变程序逻辑。
 

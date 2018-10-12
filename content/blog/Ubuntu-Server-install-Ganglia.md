@@ -4,7 +4,7 @@ date: 2016-07-29 17:54:29
 tags: Ganglia
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 `Ganglia`是一个开源的集群监控系统，它基于分层设计，使用广泛的技术，如XML数据代表，便携数据传输，`RRDtool`用于数据存储和可视化，可以方便地对机器性能及系统运行状态进行可视化监控，广泛应用于对`Hadoop`，`Spark`等分布式系统的监测管理。
 
@@ -125,7 +125,7 @@ udp_recv_channel {
 ![ganglia_master][2]
 
 
-  [1]: https://ob5vt1k7f.qnssl.com/ganglia.png
-  [2]: https://ob5vt1k7f.qnssl.com/ganglia_master.png
+  [1]: https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/ganglia.png
+  [2]: https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/ganglia_master.png
 
 <script>pangu.spacingPage();</script>

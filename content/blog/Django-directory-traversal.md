@@ -5,7 +5,7 @@ tags: [Django,Directory Traversal]
 categories: Security
 ---
 
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 最近审计代码过程中出现了没有正确处理url形成目录穿越，导致可以读取或下载任意文件的案例，过程很简单，由此却引发了和小伙伴的讨论，对风险的控制需要依赖框架本身还是必须从根本上规避风险点。下面就通过目录遍历漏洞的案例分析一下django的路由传参方式，以及在日常开发中如何避免此类风险。
 
@@ -56,10 +56,10 @@ test
 
 有经验的同学马上就能看出`file_download()`对传入的文件名并没有任何限制，只是做了文件是否存在的判断，也就是说我们可以传入`/../1/1.txt`的文件名，`full_path`经过拼接就会成为`/tmp/test/2/../../1/1.txt`，传入`read_file()`就能够读取到1.txt
 
-![1.txt](https://ob5vt1k7f.qnssl.com/JUIFX)
+![1.txt](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/JUIFX)
 类似的，如果我们传入`../../../etc/passwd`就能下载到敏感文件
 
-![passwd](https://ob5vt1k7f.qnssl.com/h0bP3)
+![passwd](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/h0bP3)
 
 可是事实上每次都是如此吗？
 
@@ -108,7 +108,7 @@ test
 
 - 使用`path('download/<path:filename>', views.file_download),`的情况
 
-![path](https://ob5vt1k7f.qnssl.com/KkoFJ)
+![path](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/KkoFJ)
 
 - 使用`path('download/<str:filename>', views.file_download),`的情况
 
@@ -132,7 +132,7 @@ Django2.0的url虽然更改了写法，但依然向老版本兼容，兼容的�
 ##### 1.`re_path('download/(?P<filename>.+)'`方式
 在`/Lib/site-packages/django/urls/conf.py`中定义了相关方法
 
-![re_path()](https://ob5vt1k7f.qnssl.com/uPvF8)
+![re_path()](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/uPvF8)
 `partial()`方法的作用就是把一个函数作为另一个函数的参数传入，这里就是把`RegexPattern()`类作为参数传进`_path()`方法，因为在下面第70行`RegexPattern()`就作为处理`re_path()`时的方法
 
 `pattern = Pattern(route, name=name, is_endpoint=True)`
@@ -141,10 +141,10 @@ Django2.0的url虽然更改了写法，但依然向老版本兼容，兼容的�
 
 构造方法之后regex就确定为我们定义的表达式，也就是`'download/(?P<filename>.+)'`
 
-![regex](https://ob5vt1k7f.qnssl.com/4dWIr)
+![regex](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/4dWIr)
 这种情况下是可以匹配任何字符串的，起不到防护目录穿越的作用
 
-![regex](https://ob5vt1k7f.qnssl.com/cEbp5)
+![regex](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/cEbp5)
 
 ##### 2. `path('download/<path:filename>'`方式
 
@@ -175,8 +175,8 @@ _PATH_PARAMETER_COMPONENT_RE = re.compile(
 
 取出`converter`部分，也就是我们指定的`path`，然后判断如果`converter`为空的话就赋值为'str'，这也就是为什么我们不指定路径转换器时默认是str的原因。
 
-![converter](https://ob5vt1k7f.qnssl.com/2Yr3G)
-![path](https://ob5vt1k7f.qnssl.com/rMvhH)
+![converter](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/2Yr3G)
+![path](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/rMvhH)
 
 接下来对转换器部分的操作
 
@@ -203,17 +203,17 @@ DEFAULT_CONVERTERS = {
 ```
 相对应的regex值也就在这里被定义
 
-![default_regex](https://ob5vt1k7f.qnssl.com/cft5C)
+![default_regex](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/cft5C)
 于是在`decorating_function()`通过`cache_get()`方法取到了这些转换器对应的表达式，最后进行了拼接
 
-![Untitled Image](https://ob5vt1k7f.qnssl.com/vUIRy)
+![Untitled Image](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/vUIRy)
 
 通过`parts.append`拼接
 `parts.append('(?P<' + parameter + '>' + converter.regex + ')')`
 
 此时的'parameter'值即为'filename'，regex值为converter对象的属性，也就是`'.+'`
 
-![regex](https://ob5vt1k7f.qnssl.com/I6I4E)
+![regex](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/I6I4E)
 
 最后拼接成的正则表达式为`'^download\\/(?P<filename>.+)$'`
 
@@ -226,7 +226,7 @@ DEFAULT_CONVERTERS = {
 
 流程跟上面指定`path`的方式一样，`converter`为空时设置为'str'
 
-![str](https://ob5vt1k7f.qnssl.com/LKW7J)
+![str](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/LKW7J)
 
 此时对应的regex值为`'[^/]+'`，也就是不匹配`'/'`
 
@@ -240,7 +240,7 @@ DEFAULT_CONVERTERS = {
 #### 流程图
 画了一张简单的流程图方便理解上述三种情况
 
-![process](https://ob5vt1k7f.qnssl.com/t5Tay)
+![process](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/t5Tay)
 
 ### 0x04 如何避免&正确的代码
 把django处理url的各种情况理清了之后可能有同学会问，是不是以后都用`path('download/<str:filename>'`的方式就能避免目录穿越呢？实际上是不建议这样的，我们不能把风险点由存在缺陷的代码处转移到依赖框架上面，主要原因有二

@@ -4,7 +4,7 @@ date: 2017-02-20 19:43:18
 tags: [Python, Mysql]
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 最近使用 Python 处理数据的时候遇到 mysql 存储 emoji 表情的问题，觉得可以总结一下。
 
@@ -57,7 +57,7 @@ cursor.execute('CREATE TABLE table(id int primary key, name char(10))') \
 ```
 可以查询 mysql 编码方式
 ` show variables like 'character_set_%';`
-![mysql_charset](https://ob5vt1k7f.qnssl.com/mysql_charset.png)
+![mysql_charset](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/mysql_charset.png)
 
 #### 2. 使用正则表达式过滤 emoji 字符
 ```

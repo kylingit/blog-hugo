@@ -4,7 +4,7 @@ date: 2016-08-27 13:13:18
 tags: Python
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 在用python对sqlite3数据库进行删除部分数据的操作后，数据库文件大小并没有改变，上网找了找原因，发现确实是这样 :
 

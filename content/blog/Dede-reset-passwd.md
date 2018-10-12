@@ -4,7 +4,7 @@ date: 2018-01-11 14:12:17
 tags: [vul,sec,dedecms]
 categories: Security
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 #### 0x01 概述
 DEDECMS在2018-01-09更新了V5.7 SP2正式版，然后在[seebug](https://www.seebug.org/vuldb/ssvid-97074)有人提交存在前台任意用户密码修改漏洞。下面简单分析一下。
@@ -43,19 +43,19 @@ else if($dopost == "safequestion")
 
 下面来看php中弱类型转换问题
 
-![php](https://ob5vt1k7f.qnssl.com/edFq9)
+![php](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/edFq9)
 
 可以看到当我们传进`0.0`时，`empty($safequestion)`就不成立了，而`$row['safequestion'] == $safequestion`即`'0' == '0.0'`成立，所以可以进入`sn`方法。除了`'0.0'`，`'0.'` `'0e123'`等都可以绕过这个判断，因为`0en`被认为是0的n次方
 
 跟进`sn`方法
 
-![sn](https://ob5vt1k7f.qnssl.com/xZxqc)
+![sn](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/xZxqc)
 
 从数据库取出一个临时密码`SELECT * FROM #@__pwd_tmp WHERE mid = '$mid'`，这里的`mid`我们可以控制，如果用户存在，发送含有临时密码的邮件，并且有个10分钟的限制(这里为了调试方便我把时间缩短了)
 
 跟进`newmail`函数
 
-![newmail](https://ob5vt1k7f.qnssl.com/0nL4H)
+![newmail](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/0nL4H)
 
 可以看到`$randval`是一个8位随机字符串，而且先进行了md5再插入到数据库，理论上我们不好破解，但是注意85行和98行的`return ShowMsg('稍后跳转到修改页', $cfg_basehost . $cfg_memberurl . "/resetpassword.php?dopost=getpasswd&amp;id=" . $mid . "&amp;key=" . $randval);`，把含有`$randval`的链接直接返回显示在页面上，所以这里就没有必要去猜这个临时密码。有了这个临时密码就可以重置任意用户的密码。
 
@@ -63,19 +63,19 @@ else if($dopost == "safequestion")
 #### 0x04 漏洞利用
 我们先注册一个用户，然后构造一个请求，`GET /dedecms/uploads/member/resetpassword.php?i=0.0&dopost=safequestion&safequestion=0e123&safeanswer=&id=1`，发送后可以看到页面跳转，然后返回含有key的链接，
 
-![key](https://ob5vt1k7f.qnssl.com/eSNsc)
+![key](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/eSNsc)
 利用这个key可以进入重置密码流程，简单看一下
 
 重置密码`/member/resetpassword.php?dopost=getpasswd&id=5`
 
-![resetpwd1](https://ob5vt1k7f.qnssl.com/oV7zo)
+![resetpwd1](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/oV7zo)
 先从`dede_pwd_tmp`表取出`mid`为5的临时密码
 
-![resetpwd2](https://ob5vt1k7f.qnssl.com/aIWLU)
+![resetpwd2](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/aIWLU)
 与传入的临时密码MD5比较，通过验证就更新用户表`dede_member`为新的密码，同时删除临时密码
 
-![resetpwd3](https://ob5vt1k7f.qnssl.com/J1mks)
-![newpwd](https://ob5vt1k7f.qnssl.com/EMzcr)
+![resetpwd3](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/J1mks)
+![newpwd](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/EMzcr)
 
 这样我们就可以重置任意用户的密码了——除了管理员，因为管理员信息存在另一个表`dede_admin`中，而且管理员默认不允许从前台登录，所以就算更改了`dede_member`里`admin`的密码也没法登录。
 

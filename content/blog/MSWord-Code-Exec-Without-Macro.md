@@ -4,7 +4,7 @@ date: 2017-10-12 12:54:29
 tags: [vul,sec]
 categories: Security
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 昨天复现了一个 Microsoft Office Word 的一个执行任意代码的姿势，跟之前爆出的两个CVE (CVE-2017-0199, CVE-2017-8759) 可以组成三板斧，这里简单记录一下
 
@@ -17,7 +17,7 @@ categories: Security
 
 这样子可以直接弹出计算器
 
-![calc](https://ob5vt1k7f.qnssl.com/GIF.gif)
+![calc](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/GIF.gif)
 
 
 既然能执行cmd那就能弹shell
@@ -28,7 +28,7 @@ categories: Security
 
 在msf里监听
 
-![msf](https://ob5vt1k7f.qnssl.com/HQ%5D%25%7DB5TLH~HBZD%7B1_%7B$D%254.png)
+![msf](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/HQ%5D%25%7DB5TLH~HBZD%7B1_%7B$D%254.png)
 
 然后开启一个服务器
 
@@ -40,7 +40,7 @@ categories: Security
 
 打开文件后反弹一个shell
 
-![shell](https://ob5vt1k7f.qnssl.com/MPI@%5B%60%25DL%28U7WZL220E0%5B7Q.jpg)
+![shell](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/MPI@%5B%60%25DL%28U7WZL220E0%5B7Q.jpg)
 
 
 过程很简单，唯一不足的是打开文件过程中会有两次弹窗，第一次是询问是否更新链接，第二个是问是否执行程序，当两个都点击确认后才会执行。
@@ -51,7 +51,7 @@ categories: Security
 
 除了上面使用的`DDEAUTO`，`DDE`也有能实现这个效果，但是要多一个步骤
 将文件后缀改为`zip`或`rar`，用`7z`打开，修改`word/settings.xml`文件，增加一行`<w:updateFields w:val="true"/>`
-![](https://ob5vt1k7f.qnssl.com/6U0%25213Q8W%7BEOM%7BJ_V@7%29G7.png)
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/6U0%25213Q8W%7BEOM%7BJ_V@7%29G7.png)
 替换原来的`xml`文件后把后缀改回来
 
 编辑文档，域代码为`{ DDE "c:\\windows\\system32\\cmd.exe" "/c notepad" }`

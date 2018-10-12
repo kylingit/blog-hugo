@@ -4,7 +4,7 @@ date: 2017-12-22 15:43:02
 tags: [vul,sec,weblogic,0day]
 categories: Security
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 最近不断听到消息，大量Weblogic主机被挂挖矿病毒，起初以为是利用之前反序列化漏洞(CVE-2017-3248)，但是团队内部从受害主机捕获的攻击代码来看，这次是针对WebLogic的WLS组件，利用xmldecoder反序列漏洞进行的RCE攻击。目前官方也给出了此次漏洞的cve[CVE-2017-10271](https://www.cvedetails.com/cve/CVE-2017-10271/)
 
@@ -21,7 +21,7 @@ docker-compose up -d
 ```
 此时会创建并运行两个容器，分别是`vulhub/weblogic`和`vulhub/weblogic`, 如下图
 
-![containers](https://ob5vt1k7f.qnssl.com/gbF5V)
+![containers](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/gbF5V)
 
 访问7001端口，weblogic已经成功运行
 
@@ -61,8 +61,8 @@ docker-compose up -d
 ```
 说明执行成功
 
-![response](https://ob5vt1k7f.qnssl.com/yn2qT)
-![reverse shell](https://ob5vt1k7f.qnssl.com/YOZ6L)
+![response](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/yn2qT)
+![reverse shell](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/YOZ6L)
 
 #### 0x03 Getshell
 另外还有直接getshell的PoC:
@@ -127,7 +127,7 @@ rm -rf /home/WebLogic/Oracle/Middleware/user_projects/domains/base_domain/server
 #### 0x06 
 附
 Github上[3xp10it/exploit](https://github.com/3xp10it/exploit/blob/cbc8d61859b9c4c312bb52225671831b895fdbc3/exps/weblogic/weblogic.py)仓库删除的脚本
-[Weblogic.py](https://ob5vt1k7f.qnssl.com/weblogic.py)
+[Weblogic.py](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/others/weblogic.py)
 
 
 <script>pangu.spacingPage();</script>

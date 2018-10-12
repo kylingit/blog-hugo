@@ -4,7 +4,7 @@ date: 2016-09-15 14:54:29
 tags: [Python,SSH,Linux]
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 salt-ssh 是 Saltstack 框架下的一款批量化远程操作工具，具体介绍可以看 [这里](http://opensgalaxy.com/2015/08/13/saltstack%E5%85%A5%E9%97%A8%E3%80%90salt-ssh%E3%80%91%E4%BD%BF%E7%94%A8/) 
 关于 Saltstack，它是一款自动化运维工具，具体可以浏览 [官网](https://saltstack.com)，这里只介绍一下 salt-ssh 的使用。

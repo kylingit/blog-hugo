@@ -4,7 +4,7 @@ date: 2018-01-19 15:20:32
 tags: [vul,sec,dedecms]
 categories: Security
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 ### 0x01 概述
 上回分析的dede重置密码漏洞有一定局限性，一是只能影响没有设置密保问题的用户，二是不能重置管理员admin的密码，原因当时也说了，管理员信息存在另一个表`dede_admin`中，而且管理员默认不允许从前台登录，所以就算更改了`dede_member`里`admin`的密码也没法登录。但是前几天又有一个缺陷被爆出来，可以绕过一些判断条件从而从前台登录管理员账户，配合上一个重置密码漏洞，可以达到从前台修改`dede_admin`表里是密码，也就是真正修改了管理员密码。
@@ -44,7 +44,7 @@ function GetNum($fnum){
 看一下`GetCookie()`
 `include/helpers/cookie.helper.php:54`
 
-![GetCookie](https://ob5vt1k7f.qnssl.com/IO7Rf)
+![GetCookie](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/IO7Rf)
 
 关键点在这个判断条件
 ```
@@ -62,7 +62,7 @@ if($_COOKIE[$key.'__ckMd5'] != substr(md5($cfg_cookie_encode.$_COOKIE[$key]),0,1
 #### 利用点一
 我们使进入`GetNum`方法的参数为`数字1+字母`的形式，经过正则替换就会变成`1`，也就是`$this->M_ID`的值，然后带入数据库查询
 
-![GetNum](https://ob5vt1k7f.qnssl.com/4zlB8)
+![GetNum](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/4zlB8)
 `$fnum`为`1qqqq`的情况，经过正则替换后值成为了1
 
 #### 利用点二
@@ -72,7 +72,7 @@ $this->M_ID = intval($this->M_ID);
 ```
 对`$this->M_ID`进行了整数类型转换，假设注册一个用户名，经过`intval`转换后为`1`就能使查询条件变成`Select * From #@__member where mid='1'`，也就取出了管理员在`dede_member`表里的密码，此时配合上一个漏洞，我们已经修改了`dede_member`中管理员的密码，只要在前台再进行一次修改密码操作，就能真正修改admin的密码。
 
-![intval](https://ob5vt1k7f.qnssl.com/Av52c)
+![intval](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/Av52c)
 这是调试的时候注册用户名为`0000001`的情况，经过`intval`转换后`M_ID`的值变成了1
 
 下面看一下如何从前台登录admin账户
@@ -149,15 +149,15 @@ if ( ! function_exists('PutCookie'))
 ### 0x03 漏洞利用
 1. 前台注册普通用户，这里注册一个`1qqqq`
 2. 访问`/member/index.php?uid=1qqqq`，获取`last_vid__ckMd5`的值
-	![uid](https://ob5vt1k7f.qnssl.com/2izw4)
+	![uid](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/2izw4)
 3. 访问`/member/index.php`，替换`DedeUserID`和`DedeUserID__ckMd5`的值
-	![admin](https://ob5vt1k7f.qnssl.com/3uAj1)
+	![admin](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/3uAj1)
 	可以发现以admin身份成功登录到了前台
-    ![admin](https://ob5vt1k7f.qnssl.com/aGGc5)
+    ![admin](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/aGGc5)
 4. 同样的，修改密码访问`member/edit_baseinfo.php`，还是要修改cookie值
-	![reset passwd](https://ob5vt1k7f.qnssl.com/OacVb)
+	![reset passwd](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/OacVb)
 	原登录密码就是我们利用上一个漏洞修改的密码，也就是`dede_member`表中的admin密码，这样就达到了真正修改admin的密码
-	![reset admin passwd](https://ob5vt1k7f.qnssl.com/OUrvR)
+	![reset admin passwd](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/OUrvR)
 	更新数据库的时候判断如果是管理员，就更新admin表中的数据
 
 ### 0x04 总结

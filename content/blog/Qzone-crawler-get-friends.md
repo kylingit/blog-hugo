@@ -5,7 +5,7 @@ tags: [Python, Mysql, Qzone, crawler]
 categories: Coding
 ---
 
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 网上有些QQ空间爬虫都是首先设置访问权限为qq好友访问，然后获取所有好友信息。
 
@@ -173,7 +173,7 @@ create_tb_sql = 'CREATE TABLE IF NOT EXISTS %s\
 
 预览
 
-![qq friends](https://ob5vt1k7f.qnssl.com/DNYkv)
+![qq friends](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/DNYkv)
 
 ### 结束语
 看似普通的get访问，用request方便又轻松，实际上背后有很多坑...比如说有些上个年代遗留的火星文...又比如说各种有意无意在签名中啊说说中啊等带各种"特殊字符"的，不做过滤直接让程序逼停...

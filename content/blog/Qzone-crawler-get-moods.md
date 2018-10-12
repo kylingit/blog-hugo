@@ -4,7 +4,7 @@ date: 2017-04-03 19:37:30
 tags: [Python, Mysql, Qzone, crawler]
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 今天来讲获取说说~
 
@@ -37,7 +37,7 @@ https://h5.qzone.qq.com/proxy/domain/users.qzone.qq.com/cgi-bin/likes/get_like_l
 ```
 http://user.qzone.qq.com/目标qq/mood/说说id
 ```
-![moods like](https://ob5vt1k7f.qnssl.com/Nt7FN)
+![moods like](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/Nt7FN)
 需要特别注意的是，这个接口和上面两个不太一样，频繁访问会导致`403`，所以若非必要，点赞部分不爬取也是可以的...或者想一个避免403的方法，比如sleep，可这肯定会使整个程序慢下来，毕竟不敢贸然上多线程...
 
 一个小Tips: 点赞数据的获取是不一定要有好友关系的，也就是说可以用小号对赞同数另外爬取，避免被封号...不是真正的封号，只是无法再访问这个地址了，一般是一天，泪的教训...
@@ -49,12 +49,12 @@ http://user.qzone.qq.com/目标qq/mood/说说id
 
 分析一下返回的数据，这是说说内容和评论内容，图片太长分两次截吧
 
-![moods](https://ob5vt1k7f.qnssl.com/T1o7g)
-![moods](https://ob5vt1k7f.qnssl.com/vXyMM)
+![moods](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/T1o7g)
+![moods](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/vXyMM)
 
 点赞的情况如下，乱码是因为网站本身的问题
 
-![moods like](https://ob5vt1k7f.qnssl.com/s84i0)
+![moods like](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/s84i0)
 
 ### 数据库设计
 刚才提到了，说说的结构相对复杂，考虑到一张表无法将所有字段包括进去，于是设计了三张表，分别是说说内容表，评论及回复表，点赞表
@@ -78,7 +78,7 @@ create_tb_sql = 'CREATE TABLE IF NOT EXISTS %s\
     pos_y varchar(20))' % tablename
 ```
 效果如下
-![moods table](https://ob5vt1k7f.qnssl.com/WEMTS)
+![moods table](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/WEMTS)
 
 #### 评论表`qq_moods_reply`
 ```
@@ -97,7 +97,7 @@ create_tb_sql = 'CREATE TABLE IF NOT EXISTS %s\
 ```
 可能有人会问，这怎么表示评论和回复之间的层次关系呢？不急，我们先来看一下效果
 
-![moods reply](https://ob5vt1k7f.qnssl.com/kmOxu)
+![moods reply](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/kmOxu)
 通过对同一层次的评论和回复插入空值，可以表示出层次关系，这和留言部分是一样的
 
 #### 点赞表`qq_moods_like`
@@ -117,7 +117,7 @@ create_tb_sql = 'CREATE TABLE IF NOT EXISTS %s\
 ```
 效果如下
 
-![moods like](https://ob5vt1k7f.qnssl.com/DkbbK)
+![moods like](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/DkbbK)
 
 同样的，同一说说的点赞适当插入空值可以表现出层次关系
 
@@ -166,7 +166,7 @@ def data2json(self, data):
 #### 流程图
 画了一个简单的流程图
 
-![get moods](https://ob5vt1k7f.qnssl.com/pGVFE)
+![get moods](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/pGVFE)
 
 
 ### 结束语

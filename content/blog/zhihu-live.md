@@ -4,7 +4,7 @@ date: 2016-06-06 22:54:29
 tags: [Anything,Thinking]
 categories: Writing
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 知乎的新产品知乎live，以全新的方式进行高质量内容分享，用廉价的“门票”就能获得大V满满的干货，有优秀的实时问答互动体验。正值NBA总决赛打得正酣，平时一直关注张公子的NBA系列赛的文章，恰巧张公子开了live，于是毫不犹豫地报名参加，勇士VS骑士 G2。
 

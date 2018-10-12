@@ -4,7 +4,7 @@ date: 2016-08-15 14:32:18
 tags: Python
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 Python的编码问题一直是一个它的一个缺点，特别是在处理中文上。Python提供了Unicode, str, utf-8, ascii等编码的相互转换，然而还是烦琐易错。
 进行sqlite3数据读取并存入文件时碰到了错误 :

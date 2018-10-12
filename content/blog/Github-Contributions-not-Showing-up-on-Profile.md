@@ -4,7 +4,7 @@ date: 2017-03-17 16:46:07
 tags: [Github,  Git]
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 最近更新文章的时候发现github没有记录Contributions，也就是小绿墙没有增加小方块，看了下`git log`发现是提交的时候用户邮箱写错了，多打了一个字母...于是Github认为这些commits都不是我提交的 =_=#
 网上找到了解决办法

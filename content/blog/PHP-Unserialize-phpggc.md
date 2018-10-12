@@ -5,7 +5,7 @@ tags: [php,unserialize,drupal,typo3,phpggc]
 categories: Security
 ---
 
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 ## 0x01 概述
 
@@ -27,16 +27,16 @@ categories: Security
 
 先来看一下补丁，diff 8.3.3 和 8.3.4 版本，主要修改点在`core/lib/Drupal/Component/Serialization/YamlPecl.php`文件`decode`方法
 
-![1538990057077](https://ob5vt1k7f.qnssl.com/1538990057077.png)
+![1538990057077](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1538990057077.png)
 
 可见在`yaml_parse`前进行了`ini_set('yaml.decode_php', 0);` 
 
 用户可控制的参数`$raw`直接传给了`yaml_parse`函数，而在手册上关于`yaml_parse`函数有这么一个注意点：
 
-```
-Warning
-Processing untrusted user input with yaml_parse() is dangerous if the use of unserialize() is enabled for nodes using the !php/object tag. This behavior can be disabled by using the yaml.decode_php ini setting.
-```
+>Warning
+>
+>Processing untrusted user input with yaml_parse() is dangerous if the use of unserialize() is enabled for nodes using the !php/object tag. This behavior can be disabled by using the yaml.decode_php ini setting.
+
 
 也就是说，如果使用了`yaml`标志`!php/object`，那么这个内容会通过`unserialize()`进行处理，设置`yaml.decode_php`则可以禁止，这就是为什么补丁增加了这行代码。
 
@@ -51,7 +51,7 @@ public static function decode($raw) {
 
 在`Yaml`类的`decode()`方法调用了`static::getSerializer()`方法，跟入
 
-![1538993007544](https://ob5vt1k7f.qnssl.com/1538993007544.png)
+![1538993007544](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1538993007544.png)
 
 可以看到加载了`yaml`扩展后就会进入`YamlPecl`类，进而调用`Yaml::decode()`方法，搜索调用`Yaml::decode`并且参数能被控制的地方，在`core/modules/config/src/Form/ConfigSingleImportForm.php`的`validateForm()`方法：
 
@@ -82,11 +82,11 @@ $data = Yaml::decode($form_state->getValue('import'));
 
 在PHPGGC中已经内置这个类，查看信息
 
-![1539050117155](https://ob5vt1k7f.qnssl.com/1539050117155.png)
+![1539050117155](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539050117155.png)
 
 看一下内部实现
 
-![1539050287387](https://ob5vt1k7f.qnssl.com/1539050287387.png)
+![1539050287387](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539050287387.png)
 
 `phpggc`将`_fn_close`参数设置为`HandlerStack`类，再在`HandlerStack`序列化的时候传入可控参数`$handler`，而在这个案例中我们不需要额外的`HandlerStack`类了，所以对`generate()`方法稍加修改，直接构造一个`FnStream`类，注意参数是`array`类型：
 
@@ -98,7 +98,7 @@ return new \GuzzleHttp\Psr7\FnStream([
 
 然后生成序列化数据：
 
-![1539050803329](https://ob5vt1k7f.qnssl.com/1539050803329.png)
+![1539050803329](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539050803329.png)
 
 接着拼接`YAML_PHP_TAG`即`!php/object`，并且要将字符串转义，注意序列化数据中的空字符，我们将其替换成`\0`，最终生成的字符串如下：
 
@@ -108,9 +108,9 @@ return new \GuzzleHttp\Psr7\FnStream([
 
 在`http://127.0.0.1/drupal-8.3.3/admin/config/development/configuration/single/import`import序列化后的数据，便可以执行代码
 
-![1539051346096](https://ob5vt1k7f.qnssl.com/1539051346096.png)
+![1539051346096](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539051346096.png)
 
-![1539051456660](https://ob5vt1k7f.qnssl.com/1539051456660.png)
+![1539051456660](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539051456660.png)
 
 #### 2.  任意文件写入
 
@@ -118,25 +118,25 @@ return new \GuzzleHttp\Psr7\FnStream([
 
 在`vendor/guzzlehttp/guzzle/src/Cookie/FileCookieJar.php`的`FileCookieJar`类
 
-![1539051809132](https://ob5vt1k7f.qnssl.com/1539051809132.png)
+![1539051809132](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539051809132.png)
 
 `__destruct()`调用`save()`方法，通过`file_put_contents()`写入文件内容，而文件名和文件内容均是我们可以控制的，所以此处可以写入一个shell
 
 同样地看一下`phpggc`中有关`FileCookieJar`类的部分：`gadgetchains/Guzzle/FW/1/chain.php`
 
-![1539052187458](https://ob5vt1k7f.qnssl.com/1539052187458.png)
+![1539052187458](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539052187458.png)
 
 通过这个类生成序列化数据
 
-![1539052263375](https://ob5vt1k7f.qnssl.com/1539052263375.png)
+![1539052263375](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539052263375.png)
 
 需要提供远程文件路径和本地文件路径两个参数
 
-![1539052815893](https://ob5vt1k7f.qnssl.com/1539052815893.png)
+![1539052815893](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539052815893.png)
 
 接着还是拼接和转义，并import数据
 
-![1539052742894](https://ob5vt1k7f.qnssl.com/1539052742894.png)
+![1539052742894](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539052742894.png)
 
 写入的是整个json字符串，但是不影响代码执行。
 
@@ -144,7 +144,7 @@ return new \GuzzleHttp\Psr7\FnStream([
 
 另一个类是`WindowsPipes`，路径`vendor/symfony/process/Pipes/WindowsPipes.php`，该类可以造成文件删除
 
-![1539053196182](https://ob5vt1k7f.qnssl.com/1539053196182.png)
+![1539053196182](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539053196182.png)
 
 在`phpggc`中没有内置这个类，于是我们按照这个工具的框架来实现一下，方便理解该工具。
 
@@ -214,15 +214,15 @@ class WindowsPipes
 
 我们直接生成`WindowsPipes`的序列化数据，把文件名作为参数传入，在反序列化的时候自动调用`removeFiles()`，实现任意文件删除
 
-![1539053814915](https://ob5vt1k7f.qnssl.com/1539053814915.png)
+![1539053814915](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539053814915.png)
 
 生成序列化字符串
 
-![1539053942995](https://ob5vt1k7f.qnssl.com/1539053942995.png)
+![1539053942995](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539053942995.png)
 
 import后文件被删除
 
-![1539054380813](https://ob5vt1k7f.qnssl.com/1539054380813.png)
+![1539054380813](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539054380813.png)
 
 ### 四、总结
 
@@ -257,7 +257,7 @@ import后文件被删除
 
 这里有两个关键点，一是文件标识，必须以`__HALT_COMPILER();?>`结尾，但前面的内容没有限制，也就是说我们可以轻易伪造一个图片文件或者`pdf`文件来绕过一些上传限制；二是反序列化，`phar`存储的`meta-data`信息以序列化方式存储，当文件操作函数通过`phar://`伪协议解析`phar`文件时就会将数据反序列化，而这样的文件操作函数有很多，包括下面这些：
 
-![1539063733837](https://ob5vt1k7f.qnssl.com/1539063733837.png)
+![1539063733837](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539063733837.png)
 
 图片来自[seebug](https://paper.seebug.org/680/)
 
@@ -269,15 +269,15 @@ import后文件被删除
 
 在`typo3/sysext/core/Classes/Database/SoftReferenceIndex.php`的`getTypoLinkParts()`方法
 
-![1539064169518](https://ob5vt1k7f.qnssl.com/1539064169518.png)
+![1539064169518](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539064169518.png)
 
 上面说到存在风险的文件操作函数，其中就包括`file_exists()`，当传给`file_exists()`的参数是`phar`压缩文档并通过`phar://`伪协议解析时，就会反序列化其中的`metadata`数据，一旦该数据被控制，就会形成漏洞。
 
 下面举一个例子演示
 
-![1539064567894](https://ob5vt1k7f.qnssl.com/1539064567894.png)
+![1539064567894](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539064567894.png)
 
-![1539064633273](https://ob5vt1k7f.qnssl.com/1539064633273.png)
+![1539064633273](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539064633273.png)
 
 可以看到通过`file_exists()`函数判断文件是否存在即对`TestObject`类进行了反序列化。
 
@@ -289,21 +289,21 @@ import后文件被删除
 
 我们已经找到可以触发漏洞的地方，但还需要一个类来执行代码，在Typo3中同样存在`FnStream`类，所以我们还是使用`guzzle/rce1`载荷将数据写入一张图片中
 
-![1539065928944](https://ob5vt1k7f.qnssl.com/1539065928944.png)
+![1539065928944](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539065928944.png)
 
-![1539065937046](https://ob5vt1k7f.qnssl.com/1539065937046.png)
+![1539065937046](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539065937046.png)
 
 然后上传这个附件，接着创建一个页面，将Link设置为`phar://`，注意需要将`:`转义
 
-![1539067380611](https://ob5vt1k7f.qnssl.com/1539067380611.png)
+![1539067380611](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539067380611.png)
 
 保存后就会触发漏洞
 
-![1539067384583](https://ob5vt1k7f.qnssl.com/1539067384583.png)
+![1539067384583](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539067384583.png)
 
 调用栈如下图所示
 
-![1539070664504](https://ob5vt1k7f.qnssl.com/1539070664504.png)
+![1539070664504](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1539070664504.png)
 
 ### 五、总结及防御
 

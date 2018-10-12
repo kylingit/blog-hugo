@@ -4,10 +4,10 @@ date: 2016-08-26 16:32:18
 tags: Python
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 某个项目中用到dns相关的模块，在长时间运行后偶尔抛出异常:
-![resolver_error](https://ob5vt1k7f.qnssl.com/dns_error.png)
+![resolver_error](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/dns_error.png)
 
 `Resolver instance has no attribute 'connectionLost'`
 ```

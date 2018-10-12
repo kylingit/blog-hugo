@@ -4,7 +4,7 @@ date: 2018-07-17 17:52:10
 tags: [vul,sec,Gitea]
 categories: Security
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 近日，Gitea 1.4.0版本的`LFS`模块出现了一个绕过登录验证未授权创建LFS对象的漏洞，由此漏洞引申出了一条非常漂亮的攻击链，值得好好学习。
 
@@ -138,7 +138,7 @@ func transformKey(key string) string {
 
 访问LFS存储对象的接口是`https://git-server.com/foo/bar.git/info/lfs/objects/batch`
 
-![1531882119588](https://ob5vt1k7f.qnssl.com/1531882119588.png)
+![1531882119588](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531882119588.png)
 
 由此我们获取到了`LFS_JWT_SECRET`
 
@@ -218,7 +218,7 @@ func parseToken(authorization string) (*models.User, *models.Repository, string,
 
 我们在[JWT debugger页面](https://jwt.io/#debugger)测试生成一段`Auth Token`，填入`payload`和上一步获取到的`LFS_JWT_SECRET`，于是得到了LFS认证的`Authorization`
 
-![1531883703859](https://ob5vt1k7f.qnssl.com/1531883703859.png)
+![1531883703859](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531883703859.png)
 
 
 
@@ -396,7 +396,7 @@ func main() {
 
 运行结果：
 
-![1531898336305](https://ob5vt1k7f.qnssl.com/1531898336305.png)
+![1531898336305](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531898336305.png)
 
 可以看到主要是以`_old_iod` `uid` `uname`三个值组成的session内容，那么我们就可以构造一组这样的值来伪造一个session
 
@@ -439,7 +439,7 @@ func main() {
 
 运行之后生成一个hex序列
 
-![1531898708274](https://ob5vt1k7f.qnssl.com/1531898708274.png)
+![1531898708274](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531898708274.png)
 
 这段序列里就包含了session信息，包括 `_old_iod` `uid` `uname`，然后我们可以利用这个伪造的`session`成功登录
 
@@ -449,7 +449,7 @@ func main() {
 
 ##### 1. 读取`app.ini`，获得`LFS_JWT_SECRET`
 
-![1531882119588](https://ob5vt1k7f.qnssl.com/1531882119588.png)
+![1531882119588](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531882119588.png)
 
 ##### 2. 针对`session`文件名创建`LFS`对象
 
@@ -478,11 +478,11 @@ def create_lfs_object(session):
 
 ##### 3. 生成`Authorization`
 
-![1531883703859](https://ob5vt1k7f.qnssl.com/1531883703859.png)
+![1531883703859](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531883703859.png)
 
 ##### 4. 生成`session`数据
 
-![1531898708274](https://ob5vt1k7f.qnssl.com/1531898708274.png)
+![1531898708274](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531898708274.png)
 
 ##### 5. 写入`session`数据
 
@@ -516,11 +516,11 @@ SESSION_DATA = HEX_DATA.decode('hex')
 
 ##### 6. 修改Session
 
-![1531905605099](https://ob5vt1k7f.qnssl.com/1531905605099.png)
+![1531905605099](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531905605099.png)
 
 后续利用`Git Hooks`自动执行命令就不多说了
 
-![1531905731043](https://ob5vt1k7f.qnssl.com/1531905731043.png)
+![1531905731043](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531905731043.png)
 
 ### 0x07 补丁分析
 https://github.com/go-gitea/gitea/pull/3871/commits/61d86164b7a81cf478b28ed3ffd9aa83d33116d9
@@ -530,13 +530,13 @@ https://github.com/go-gitea/gitea/pull/3871/commits/61d86164b7a81cf478b28ed3ffd9
 1. 首先把缺少的`return`给补上了
 2. 限定了`oid`参数值必须符合`sha256`格式，如果查询的`oid`不存在则返回404，这样我们就无法指定任意`oid`值
 
-![1531798747694](https://ob5vt1k7f.qnssl.com/1531798747694.png)
+![1531798747694](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531798747694.png)
 
 3. 然后使用`path.Clean()`方法过滤多余的`.`和`/`，限制`repo`里不能出现`.`和`/`字符
 
-![1531804973465](https://ob5vt1k7f.qnssl.com/1531804973465.png)
+![1531804973465](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531804973465.png)
 
-![1531804989614](https://ob5vt1k7f.qnssl.com/1531804989614.png)
+![1531804989614](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1531804989614.png)
 
 ### 0x08 总结
 

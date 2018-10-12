@@ -5,7 +5,7 @@ tags: [Python, Mysql, Qzone, crawler]
 categories: Coding
 ---
 
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 想要抓取 QQ 空间数据的第一步就是登录空间，通过好友关系获取说说，日志，留言等。
 
@@ -20,7 +20,7 @@ categories: Coding
 <!-- more -->
 
 #### 1. 登录流程
-![login](https://ob5vt1k7f.qnssl.com/vrtFN)
+![login](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/vrtFN)
 
 #### 2. 常规登录
 这段是`qqlib`的示例，可以处理含验证码的登录
@@ -97,7 +97,7 @@ def g_tk(self):
 https://h5.qzone.qq.com/proxy/domain/r.qzone.qq.com/cgi-bin/user/cgi_personal_card?uin=用户qq&g_tk=g_tk值
 ```
 请求成功返回一段 json，如果 `g_tk` 值错误或者请求不合法的话返回错误码 403
-![user info](https://ob5vt1k7f.qnssl.com/jQpGH)
+![user info](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/jQpGH)
 
 #### 6. 后续
 这样我们有了可用的 cookies ，从 cookies 计算`g_tk`值，有了`g_tk`和好友 qq 号就可以拼接 url 批量获取好友数据了~

@@ -4,7 +4,7 @@ date: 2017-03-18 23:21:02
 tags: Linux
 categories: Coding
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 ### 1. [一個改良的 Ping](http://fangpeishi.com/improved_ping.html)
 有时候想 ping 一个网址，直接从浏览器复制会带上`http://`，粘进命令行就出错了...
@@ -22,7 +22,7 @@ ping -c 4 ${new_args}
 ```
 [作者](http://fangpeishi.com)还带上另一个功能，一个网段的也能用
 `ping 192.168.1.1/32` ----> `ping 192.168.1.1`
-![Untitled Image](https://ob5vt1k7f.qnssl.com/QSTrD)
+![Untitled Image](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/QSTrD)
 
 <!-- more -->
 
@@ -38,7 +38,7 @@ if [ ! -z $1 ];then
 fi
 </dev/urandom tr -dc '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+' | head -c${L}; echo ""
 ```
-![Untitled Image](https://ob5vt1k7f.qnssl.com/ooNjB)
+![Untitled Image](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/ooNjB)
 
 ### 3. 不定期更新
 

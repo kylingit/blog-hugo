@@ -4,7 +4,7 @@ date: 2018-01-09 10:45:49
 tags: [vul,sec,weblogic,rmi]
 categories: Security
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 前阵子披露出的Weblogic XMLDecoder反序列化漏洞影响广泛，不少厂商都中了招，最近又捕获到不少利用这个漏洞进行挖矿的案例，实际上一开始在野外出现的利用就是挖矿程序，那时候漏洞还没被披露= =所以说有些时候黑产都快成为行业的风向标了，安全领域需要与黑灰色产业斗智斗勇，任重道远...
 
@@ -49,7 +49,7 @@ public class Exploit {
 
 经过测试jdk1.8版本会有异常产生，需要额外设置`com.sun.jndi.rmi.object.trustURLCodebase = True`，所以这里建议使用jdk1.8以下版本
 
-![error](https://ob5vt1k7f.qnssl.com/b2MmC)
+![error](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/b2MmC)
 
 编译完成之后在VPS开启一个http服务
 
@@ -124,11 +124,11 @@ public class TestJNDI {
 ```
 首先测试本地JNDI服务，先运行`JNDIServer`，可以看到在本地监听了1099端口
 
-![1099](https://ob5vt1k7f.qnssl.com/OLArZ)
+![1099](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/OLArZ)
 
 然后运行客户端`TestJNDI`，可以看到VPS收到了一次请求，访问了`Exploit.class`，接着执行了calc:
 
-![calc](https://ob5vt1k7f.qnssl.com/e5ntY)
+![calc](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/e5ntY)
 
 测试成功
 
@@ -159,7 +159,7 @@ Object object = context.lookup("rmi://remote_server/Exploit");
 ```
 可以看到执行成功
 
-![calc2](https://ob5vt1k7f.qnssl.com/fcbQR)
+![calc2](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/fcbQR)
 
 
 ### 0x04 测试Weblogic
@@ -200,7 +200,7 @@ VPS上nc监听3388端口，执行成功的话会接收到目标主机的passwd�
 
 同样的，先开启JNDI和http服务，还得再监听3388，然后发送PoC
 
-![rev](https://ob5vt1k7f.qnssl.com/fjakh)
+![rev](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/fjakh)
 成功接收到信息，利用成功。
 
 

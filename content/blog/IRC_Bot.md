@@ -5,7 +5,7 @@ tags: [sec,IRC,BOT]
 categories: Security
 ---
 
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 
 近期在蜜罐上捕获到两个利用RCE漏洞传播的远控木马，经过分析判断是基于IRC协议的bot样本，分别是使用php编写的`Pbot`和使用Perl版的`Perl IrcBot`，下面简单分析一下这两个脚本。
@@ -32,7 +32,7 @@ categories: Security
 
 黑客利用IRC协议与被控主机通信，C&C发送的指令就是这种格式，bot根据PRIVMSG后的Message进行相应操作，大致过程如下图所示
 
-![](https://ob5vt1k7f.qnssl.com/Snipaste_20180605_111020.png)
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/Snipaste_20180605_111020.png)
 
 ### 环境准备
 
@@ -56,7 +56,7 @@ categories: Security
 
 连接上本地IRC服务器后我们创建一个channel，叫做`#php`
 
-![1528252223926](https://ob5vt1k7f.qnssl.com/1528252223926.png)
+![1528252223926](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528252223926.png)
 
 这样就加入了`#php`channel
 
@@ -107,11 +107,11 @@ public function start($cfg)
 
 随后bot会设置一个随机名称加入相应的channel
 
-![1528252610192](https://ob5vt1k7f.qnssl.com/1528252610192.png)
+![1528252610192](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528252610192.png)
 
 在IRC聊天室也能看到bot上线
 
-![1528252650212](https://ob5vt1k7f.qnssl.com/1528252650212.png)
+![1528252650212](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528252650212.png)
 
 
 
@@ -173,9 +173,9 @@ bot会根据PRIVMSG后面的`.command`进入相应的分支
 
 #### uname
 
-![1528254954215](https://ob5vt1k7f.qnssl.com/1528254954215.png)
+![1528254954215](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528254954215.png)
 
-![1528254899287](https://ob5vt1k7f.qnssl.com/1528254899287.png)
+![1528254899287](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528254899287.png)
 
 在进入对应指令的分支之前先判断当前连接的irc服务器是否在`hostauth`列表，这决定了bot是否接受控制
 
@@ -187,11 +187,11 @@ bot会根据PRIVMSG后面的`.command`进入相应的分支
 
 执行命令部分有两块可以实现，分别是exec和cmd
 
-![1528255190724](https://ob5vt1k7f.qnssl.com/1528255190724.png)
+![1528255190724](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528255190724.png)
 
 其中exec直接调用php内置的exec命令，cmd则是通过自定义方法`Exe()`执行，在`Exe()`方法内部对系统支持的命令执行函数进行了判断，可以通过以下几种方法使命令得到最终执行
 
-![1528255437456](https://ob5vt1k7f.qnssl.com/1528255437456.png)
+![1528255437456](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528255437456.png)
 
 #### pscan
 
@@ -199,13 +199,13 @@ bot会根据PRIVMSG后面的`.command`进入相应的分支
 
 `.pscan ip port`
 
-![1528271275578](https://ob5vt1k7f.qnssl.com/1528271275578.png)
+![1528271275578](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528271275578.png)
 
 #### conback
 
 `conback <ip> <port> `
 
-![1528270109767](https://ob5vt1k7f.qnssl.com/1528270109767.png)
+![1528270109767](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528270109767.png)
 
 该指令会在尝试在`/tmp/`和`/var/tmp`写入脚本，脚本使用perl语言编写并经过base64编码，执行后会向指定ip反弹一个shell，在连接断开后脚本自动删除。脚本内容如下：
 
@@ -243,11 +243,11 @@ print "[*] Datached\n\n";
 
 测试了几个功能都是可以正常使用的，如下图
 
-![1528269072874](https://ob5vt1k7f.qnssl.com/1528269072874.png)
+![1528269072874](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528269072874.png)
 
 在数据包中也能清楚地看到交互过程
 
-![1528270676034](https://ob5vt1k7f.qnssl.com/1528270676034.png)
+![1528270676034](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528270676034.png)
 
 
 
@@ -255,7 +255,7 @@ print "[*] Datached\n\n";
 
 基于Perl编写的IrcBot功能大致与Pbot相同，不过实现方式有些不一样
 
-![1528274109719](https://ob5vt1k7f.qnssl.com/1528274109719.png)
+![1528274109719](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528274109719.png)
 
 从bot的帮助信息来看是支持不少指令的，主要分为以下几个功能模块
 
@@ -292,11 +292,11 @@ my @channels = ("#Perl"); 	# IRC频道
 
 抓取数据包看一下IrcBot与IRC服务器之间的通信
 
-![1528274862059](https://ob5vt1k7f.qnssl.com/1528274862059.png)
+![1528274862059](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528274862059.png)
 
 发送消息部分是和Pbot是一样的，Pbot是通过起始符(`.`)来提取具体指令，而在Perl IrcBot内部则是通过正则表达式来完成，即`parse`方法
 
-![1528275278915](https://ob5vt1k7f.qnssl.com/1528275278915.png)
+![1528275278915](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528275278915.png)
 
 随后根据具体指令执行相应的功能
 
@@ -334,23 +334,23 @@ if (grep {$_ =~ /^\Q$hostmask\E$/i} @hostauth) {
 
 其中`ircase`是相应的在IRC频道中的操作
 
-![1528276673338](https://ob5vt1k7f.qnssl.com/1528276673338.png)
+![1528276673338](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528276673338.png)
 
 用图形来表示bot的主要功能如下图所示
 
-![1528281340573](https://ob5vt1k7f.qnssl.com/1528281340573.png)
+![1528281340573](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528281340573.png)
 
 
 
 #### 行为特征
 
-![1528277061564](https://ob5vt1k7f.qnssl.com/1528277061564.png)
+![1528277061564](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528277061564.png)
 
 在bot启动的时候，不会以自身的进程启动，而是在`sshd`，`apache`等进程中随机fork一个启动，fork失败则退出脚本，这样子非常隐蔽地隐藏了自身进程，随后在加入IRC频道的过程中也会随机选择一个IRC版本号加入。
 
 在运行Perl IrcBot后，脚本选择以`/usr/sbin/cron`的进程启动，而且可以明显看到CPU占用达到100%，脚本潜伏在正常进程中很难被发现。
 
-![1528274476743](https://ob5vt1k7f.qnssl.com/1528274476743.png)
+![1528274476743](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1528274476743.png)
 
 
 

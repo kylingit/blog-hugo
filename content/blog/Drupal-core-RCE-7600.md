@@ -5,7 +5,7 @@ tags: [vul,sec,Drupal]
 categories: Security
 ---
 
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 #### 0x01 概述
 
@@ -65,21 +65,21 @@ Drupal比较特殊，它不像大部分cms通过html直接渲染页面，而是�
   }
 ```
 
-![upload](https://ob5vt1k7f.qnssl.com/8b1t3)
+![upload](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/8b1t3)
 
-![form_parents](https://ob5vt1k7f.qnssl.com/Q3ys0)
+![form_parents](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/Q3ys0)
 
 问题就出现在`$request->query->get('element_parents')`这个地方，`$form_parents`父节点的值是从`get()`取出`element_parents`参数传进去的，进入下面的`NestedArray::getValue()`方法，`getValue()`的作用是接收一个节点，把这个节点下的叶子节点全部遍历出来，再根据叶子节点的`key-value`值进行后续操作。
 
-![getValue](https://ob5vt1k7f.qnssl.com/39ciX)
-![user_picture](https://ob5vt1k7f.qnssl.com/f8qiO)
+![getValue](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/39ciX)
+![user_picture](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/f8qiO)
 
 按理说这样的功能很正常，关键就在于这个`element_parents`正是我们可以控制的，也就是说我们可以指定`uploadAjaxCallback()`渲染我们给它的参数，而这个参数可以是恶意的。
 
 #### 0x05 漏洞分析
 那么我们传进去什么参数呢？我们先来测试一下，正常注册流程，`mail`参数传进去一个数组的话会怎么样
 
-![mail](https://ob5vt1k7f.qnssl.com/KJE50)
+![mail](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/KJE50)
 可以看到我们构造的“子节点”被存储在`mail-value`下，如果要取出这个值就得让上面提到的`getValue()`接收这个参数，所以我们构造`element_parents=account/name/%23value`，这样子`getValue()`就会遍历出我们构造的参数
 
 现在参数已经能够传进去了，那么在哪里执行呢？继续往下跟
@@ -135,12 +135,12 @@ if (!$theme_is_implemented && isset($elements['#markup'])) {
 ```
 这两个参数都是我们可控的，于是造成一个代码执行
 
-![call_user_func](https://ob5vt1k7f.qnssl.com/jHlV8)
+![call_user_func](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/jHlV8)
 
 
 回头看一下这处`call_user_func_array`，这里的`$callable`和`$args`两个参数实际上也是可控的，通过`#lazy_builder`属性传进来，checkpoint的分析报告正是分析了这个地方
 
-![call_user_func_array](https://ob5vt1k7f.qnssl.com/Gj3xu)
+![call_user_func_array](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/Gj3xu)
 
 #### 0x06 总结
 关注这个漏洞也是好长时间了，当时粗略看了一下，因为补丁直接对入口进行了过滤，要找到真正触发的地方太难了，所以也迟迟不见PoC出来。checkpoint的分析报告出来后好好跟了一遍，不得不感叹人家真厉害(逃...

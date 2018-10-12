@@ -4,7 +4,7 @@ date: 2016-06-23 10:35:49
 comments: false
 categories: Writing
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/pangu.js"></script>
 
 * * *
 不知道为什么首页文章排序不按照发布日期排序，而且如果发布时间是当天的话无法生成html页面，需要把时间往前改才行，很奇怪
@@ -31,7 +31,7 @@ categories: Writing
 一个灵魂唤醒另一个灵魂  
 <div align = right>2017-02-20</div>
 * * *
-![](https://ob5vt1k7f.qnssl.com/IMG_1141.PNG?imageMogr2/thumbnail/!50p)
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/IMG_1141.PNG?imageMogr2/thumbnail/!50p)
 <div align = right>2016-08-29</div>
 * * *
 我要给马丁老爷子寄刀片...٩(ŏ﹏ŏ、)۶
@@ -63,7 +63,7 @@ Speedtest cli 测速
 
 截图
 
-![Untitled Image](https://ob5vt1k7f.qnssl.com/5495426634.png)
+![Untitled Image](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/5495426634.png)
 
 <div align = right>2016-07-20</div>
 

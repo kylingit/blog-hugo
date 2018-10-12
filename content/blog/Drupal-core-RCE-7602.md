@@ -5,7 +5,7 @@ tags: [vul,sec,Drupal]
 categories: Security
 ---
 
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 #### 0x01 概述
 
@@ -29,7 +29,7 @@ https://www.drupal.org/project/drupal/releases
 
 这次的问题出在删除文章的时候，因此需要文章删除权限，我们先走一遍正常删除文章的逻辑
 
-![delete](https://ob5vt1k7f.qnssl.com/VGL3Y)
+![delete](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/VGL3Y)
 请求中每个node即代表一篇文章。
 可以看到是会重定向到文章页面的，根据上个漏洞的分析我们猜测，一定还是走到了`drupal_redirect_form()`，我们已经知道如果走到`drupal_redirect_form()`分支，是不会往数据库缓存`form_build_id`的，我们的目的还是让程序不满足一定条件从而不进行表单提交后重定向，所以还是跟着`CVE-2018-7600`的套路来走
 
@@ -41,7 +41,7 @@ drupal_process_form($form_id, $form, $form_state);
 ```
 跟入`drupal_process_form()`
 
-![drupal_process_form](https://ob5vt1k7f.qnssl.com/w0cQZ)
+![drupal_process_form](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/w0cQZ)
 还是一样，`$form_state['submitted']`被设置为true
 
 回到902行
@@ -49,45 +49,45 @@ drupal_process_form($form_id, $form, $form_state);
 `if ($form_state['submitted'] && !form_get_errors() && !$form_state['rebuild'])`
 条件被满足，进入这个分支便会执行`drupal_redirect_form()`
 
-![drupal_redirect_form](https://ob5vt1k7f.qnssl.com/aoYne)
+![drupal_redirect_form](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/aoYne)
 
 而在这一步之前需要经过的判断是`_form_element_triggered_scripted_submission()`
 所以回到一开始的问题，构造一个`_triggering_element_value`使得键值对相等，从而不进行rebuild
 
 我们传入`_triggering_element_name=form_id`
 
-![post](https://ob5vt1k7f.qnssl.com/UBCWM)
-![form_id](https://ob5vt1k7f.qnssl.com/Rbrm4)
+![post](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/UBCWM)
+![form_id](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/Rbrm4)
 可以看到条件被满足，`$form_state['submitted']`没有被设置为true，还是保持默认值false
 
-![submitted](https://ob5vt1k7f.qnssl.com/UYLtu)
-![submitted](https://ob5vt1k7f.qnssl.com/o98bE)
+![submitted](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/UYLtu)
+![submitted](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/o98bE)
 
 进入`drupal_rebuild_form()`
 
-![drupal_rebuild_form](https://ob5vt1k7f.qnssl.com/WdeFV)
+![drupal_rebuild_form](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/WdeFV)
 表单被缓存
 
-![form_set_cache](https://ob5vt1k7f.qnssl.com/MCCPJ)
-![cache_form](https://ob5vt1k7f.qnssl.com/U5Tej)
+![form_set_cache](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/MCCPJ)
+![cache_form](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/U5Tej)
 
 然后我们发送第二个post包来取出我们构造好的form，向**`file/ajax/actions/cancel/%23options/path`**发起请求
 
-![post2](https://ob5vt1k7f.qnssl.com/voiue)
+![post2](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/voiue)
 
 参数传递进去
 
-![file_ajax_upload](https://ob5vt1k7f.qnssl.com/luJMk)
+![file_ajax_upload](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/luJMk)
 最终还是跟入到
 `$output = drupal_render($form);`
 根据前几次的经验，我们还是选择`'#post_render'`参数，
 
-![post_render](https://ob5vt1k7f.qnssl.com/GV3Rc)
+![post_render](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/GV3Rc)
 假如我们能控制这个参数，在`drupal_render()`方法里就会把这个参数作为`$function`函数名，而传给它的参数则是`[%23markup]`
 
 所以问题回到了一开始，我们需要传递什么样的恶意参数，可以让系统直接接收而不经过过滤，还是之前的套路，搜索module下删除文章的相关操作
 
-![node_form_delete_submit](https://ob5vt1k7f.qnssl.com/niMWz)
+![node_form_delete_submit](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/niMWz)
 可以看到`node_form_delete_submit()`方法从get方法直接接收参数`destination`，与最初分析正常删除文章的参数正是同一个，那么我们就可以利用`destination`传进恶意参数
 
 构造如下
@@ -106,11 +106,11 @@ destination=a?q[%23post_render][]=passthru%26q[%23type]=markup%26q[%23markup]=di
 ```
 然后经过`parse_url()`方法对url结构进行解析
 
-![parse_url](https://ob5vt1k7f.qnssl.com/1530254681531.png)
+![parse_url](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1530254681531.png)
 
 `a`参数是次要的，主要是`q`参数，因为在`drupal_parse_url()`下半部分从q取出值赋给`$options['path']`，也就是a被覆盖了，这个时候的`$options['path']`就是我们传入的数组
 
-![options](https://ob5vt1k7f.qnssl.com/s4o7s)
+![options](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/s4o7s)
 
 参数缓存进整个form后通过第二个请求取出，同样经过
 
@@ -121,10 +121,10 @@ foreach ($form_parents as $parent) {
 ```
 遍历叶子节点取出参数
 
-![parent](https://ob5vt1k7f.qnssl.com/Wgz3w)
+![parent](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/Wgz3w)
 进入`drupal_render()`执行
 
-![passthru](https://ob5vt1k7f.qnssl.com/SsmNM)
+![passthru](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/SsmNM)
 
 #### 0x05 PoC
 略
@@ -134,7 +134,7 @@ foreach ($form_parents as $parent) {
 
 https://github.com/drupal/drupal/commit/080daa38f265ea28444c540832509a48861587d0
 
-![patch](https://ob5vt1k7f.qnssl.com/2Zhjq)
+![patch](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/2Zhjq)
 其中一个重要操作就是对`destination`参数进行了净化
 
 ![cleanDestination](http://ob5vt1k7f.qnssl.com/CaZPF)

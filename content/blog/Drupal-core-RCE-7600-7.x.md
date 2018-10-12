@@ -4,7 +4,7 @@ date: 2018-04-20 23:05:34
 tags: [vul,sec,Drupal]
 categories: Security
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 #### 0x01 概述
 
@@ -21,18 +21,18 @@ CVE-2018-7600影响范围包括了Drupal 6.x，7.x，8.x版本，前几天8.x版
 
 先分析第一个post，照例还是先看一下Drupal 7的表单处理流程，跟8版本不太一样，但是入口还是相似的。
 根据文档描述，当我们提交一个表单(例如找回密码)时，系统会通过`form_builder()`方法创建一个form
-![user/passwd](https://ob5vt1k7f.qnssl.com/lffx4.jpg)
+![user/passwd](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/lffx4.jpg)
 一系列预处理后，会由`drupal_build_form
 ()`方法创建一个表单，在第386行调用`drupal_process_form()`方法，
 跟进`drupal_process_form()`方法，这时候默认的`$form_state['submitted']`为false
 
-![submitted](https://ob5vt1k7f.qnssl.com/dd7fx.png)
+![submitted](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/dd7fx.png)
 不满足if条件，`$form_state['submitted']`被设置为true
 
-![true](https://ob5vt1k7f.qnssl.com/kqijr.png)
+![true](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/kqijr.png)
 于是进入这个分支，最终被`drupal_redirect_form`重定向
 
-![drupal_redirect_form](https://ob5vt1k7f.qnssl.com/so5l4.jpg)
+![drupal_redirect_form](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/so5l4.jpg)
 
 我们的目的是要让系统缓存一个`form_build_id`，以便后面拿出来用。要想form被缓存，就得想办法让`if ($form_state['submitted'] && !form_get_errors() && !$form_state['rebuild'])`不成立，也就是说要使`$form_state['submitted']`为false
 从而进入下面的`drupal_rebuild_form`
@@ -58,7 +58,7 @@ if (!$form_state['programmed'] && !isset($form_state['triggering_element']) && !
 ```
 如果没有设置`$form_state['triggering_element']`，那么`$form_state['triggering_element']`就设置为第一个button的值，所以正常传递表单的时候`$form_state['triggering_element']['#executes_submit_callback']`就总会有值
 
-![button](https://ob5vt1k7f.qnssl.com/1do73.jpg)
+![button](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/1do73.jpg)
 
 现在问题来了，如何构造一个form能够确保`$form_state['triggering_element']['#executes_submit_callback']`为空或者说不存在这个数组呢？
 
@@ -102,14 +102,14 @@ function _form_element_triggered_scripted_submission($element, &$form_state) {
 
 根据PoC，我们传入`_triggering_element_name=name`
 
-![element](https://ob5vt1k7f.qnssl.com/3c6kh.jpg)
+![element](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/3c6kh.jpg)
 看到进入这个分支，进入`form_set_cache()`方法
 
-![](https://ob5vt1k7f.qnssl.com/cn1jh.jpg)
-![](https://ob5vt1k7f.qnssl.com/lskgu.png)
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/cn1jh.jpg)
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/lskgu.png)
 数据库中插入缓存`form_build_id`
 
-![](https://ob5vt1k7f.qnssl.com/odfo8.png)
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/odfo8.png)
 成功写入缓存
 
 
@@ -186,17 +186,17 @@ if ($page_callback_result == MENU_SITE_ONLINE) {
   }
 }
 ```
-![call_user_func_array](https://ob5vt1k7f.qnssl.com/qvqwz.png)
+![call_user_func_array](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/qvqwz.png)
 到这里就跟8版本的情况有点类似了
 
 跟入回调函数`file_ajax_upload()`
 
-![file_ajax_upload](https://ob5vt1k7f.qnssl.com/tij37.jpg)
+![file_ajax_upload](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/tij37.jpg)
 还是一样，把`$form_parents`完整取出赋值给`$form`，加上一些前缀后缀后最终进入`drupal_render()`方法
 
 最终得到执行
 
-![passthru](https://ob5vt1k7f.qnssl.com/rpwrs.jpg)
+![passthru](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/rpwrs.jpg)
 
 到目前为止我们分析清楚了为什么PoC要发两次包，以及第二次请求为什么要带上一个`form_build_id`，现在来想一想为什么要请求`user/password`这个路径呢？
 在user这个module下的`user_pass()`方法

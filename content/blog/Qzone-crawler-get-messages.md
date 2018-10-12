@@ -5,7 +5,7 @@ tags: [Python, Mysql, Qzone, crawler]
 categories: Coding
 ---
 
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 今天来讲爬取所有留言吧~
 
@@ -15,7 +15,7 @@ categories: Coding
 我们分析一个请求首先要抓到与服务器交互的数据包，这就要用到抓包工具，像`Burpsuite`,`Fiddler`等，为了方便有时候也直接用`chrome`的审查元素
 
 登录空间，打开`f12`，切换到`network`选项卡，然后点击留言板，注意下面的请求，找到获取留言的链接
-![http request](https://ob5vt1k7f.qnssl.com/xNpNZ)
+![http request](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/xNpNZ)
 
 它长这样
 
@@ -32,7 +32,7 @@ https://h5.qzone.qq.com/proxy/domain/m.qzone.qq.com/cgi-bin/new/get_msgb?uin=登
 ### 数据分析
 右键新标签页打开这个链接，分析返回的数据
 
-![http reply](https://ob5vt1k7f.qnssl.com/PFpqZ)
+![http reply](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/PFpqZ)
 
 这也是一串json格式的数据，这样我们就能看到一条留言的存储结构，包括留言总数，留言者，留言内容，留言时间，回复内容等等，所有都get到了，然后设计数据库，存下来就ok了
 
@@ -42,9 +42,9 @@ https://h5.qzone.qq.com/proxy/domain/m.qzone.qq.com/cgi-bin/new/get_msgb?uin=登
 #### 坑一
 当一切准备就绪，摩拳擦掌准备大干一场的时候，忽然发现，对方设置了访问权限...
 
-![cannot access](https://ob5vt1k7f.qnssl.com/IqCvJ)
+![cannot access](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/IqCvJ)
 
-![sad](https://ob5vt1k7f.qnssl.com/ljsdK)
+![sad](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/ljsdK)
 
 好吧，再正常不过的事了，谁还没有个小秘密呢(~~人家根本就不想让你看好嘛~~)
 
@@ -62,13 +62,13 @@ https://h5.qzone.qq.com/proxy/domain/base.qzone.qq.com/cgi-bin/user/cgi_userinfo
 
 当对方限制了我们的访问权限，同样返回一个`-4009`状态码，还有`您无权访问`的提示信息，这两个都可以用来判断对方是否对我们设置了访问权限
 
-![cannot access](https://ob5vt1k7f.qnssl.com/pfccO)
+![cannot access](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/pfccO)
 
 #### 坑二
 好了，现在我们解决了没有访问权限的问题，抛弃了那些早已抛弃我们的小伙伴，再次兴致勃勃地准备大干一场(雾)的时候，忽然发现，私密留言...
 
-![secret message](https://ob5vt1k7f.qnssl.com/y81Qe)
-![so sad](https://ob5vt1k7f.qnssl.com/3I4Aj)
+![secret message](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/y81Qe)
+![so sad](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/3I4Aj)
 
 好吧，再正常不过的事了，谁还没有好几个小秘密呢(~~人家双方都不想让你看好嘛~~)
 
@@ -107,7 +107,7 @@ create_tb_sql = 'CREATE TABLE IF NOT EXISTS %s\
 
 预览
 
-![qq messages](https://ob5vt1k7f.qnssl.com/cIIY1)
+![qq messages](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/cIIY1)
 
 - `qq_messages_reply`结构
 
@@ -125,7 +125,7 @@ create_tb_sql = 'CREATE TABLE IF NOT EXISTS %s\
 
 预览
 
-![qq message reply](https://ob5vt1k7f.qnssl.com/5pPWS)
+![qq message reply](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/5pPWS)
 
 插入数据的时候根据回复数插入空值，使看上去有层次关系
 

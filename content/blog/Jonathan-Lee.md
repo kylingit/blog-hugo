@@ -4,11 +4,11 @@ date: 2016-07-04 22:54:29
 tags: Music
 categories: Listening
 ---
-<script src="https://ob5vt1k7f.qnssl.com/pangu.js"></script>
+<script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
 
 他们都说，年少不听李宗盛。
 
-![Jonathan Lee](https://ob5vt1k7f.qnssl.com/Jonathan Lee.jpg)
+![Jonathan Lee](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/Jonathan Lee.jpg)
 
 <!-- more -->
 
