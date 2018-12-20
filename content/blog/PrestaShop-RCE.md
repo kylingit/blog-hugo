@@ -51,23 +51,23 @@ https://assets.prestashop2.com/en/system/files/ps_releases/prestashop_1.7.4.3.zi
 
 在`dialog.php`开头设置了一个`verify`字段
 
-​```php
+```php
 $_SESSION["verify"] = "RESPONSIVEfilemanager";
-​```
+```
 
 而在页面检查了这个字段的值，所以无法直接访问`ajax_calls.php`页面，必须先访问`dialog.php`，目的应该是为了保证文件操作都是从`dialog.php`页面进行的吧
 
-​```php
+```php
 if ($_SESSION['verify'] != 'RESPONSIVEfilemanager') {
     die('Forbidden');
 }
-​```
+```
 
 然后我们就可以上传一个`phar`文件，当然系统限制文件后缀只能在白名单内`'jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg', 'pdf', 'mov', 'mpeg', 'mp4', 'avi', 'mpg', 'wma', 'flv', 'webm' `，所以需要将`phar`文件重命名符合要求的后缀。由于在`phar://`解析时只要满足`phar`文件标识，即文件头必须以`__HALT_COMPILER();?>`结尾，所以并不限制文件后缀。此处也有一个技巧，我们可以创建一个合法的`jpeg`文件，同时又是一个`phar`文件，这个文件甚至可以绕过`MIME`检查，关于这个技巧可以参考[这里](https://www.nc-lp.com/blog/disguise-phar-packages-as-images)
 
 接下来具体看`image_size`分支
 
-​```php
+```php
 case 'image_size':
     if (realpath(dirname(_PS_ROOT_DIR_.$_POST['path'])) != realpath(_PS_ROOT_DIR_.$upload_dir)) {
         die();
@@ -79,13 +79,13 @@ case 'image_size':
     }
 
     break;
-​```
+```
 
 第一个`if`条件，检查`path`参数的绝对路径是否和系统定义的`upload_dir`绝对路径相等，`upload_dir`的值是
 
-​```php
+```php
 $upload_dir = Context::getContext()->shop->getBaseURI().'img/cms/'; // path from base_url to base of upload folder (with start and final /)
-​```
+```
 
 而我们要`post`的`path`参数是这个样子`phar://path/phar.jpg`，显然无法通过判断。这时候考虑一下，假如我们把默认上传路径修改了，比如改成`img/test/`，那么系统就会找不到`img/cms/`这个路径，`realpath`返回结果为`false`，那么就可以绕过这个条件。
 
@@ -95,9 +95,9 @@ $upload_dir = Context::getContext()->shop->getBaseURI().'img/cms/'; // path from
 
 接下来看第2个条件
 
-​```php
+```php
 $pos = strpos($_POST['path'], $upload_dir);
-​```
+```
 
 此处只要让`path`参数包含`img/cms/`字符串即可，这样经过后面的替换和拼接，`path`就类似于`phar://img/test/phar.pdf/var/www/html/img/cms/ `，不影响`phar`解析
 
@@ -105,7 +105,7 @@ $pos = strpos($_POST['path'], $upload_dir);
 
 在`PrestaShop`项目中存在`Monolog`，这是`php`下一个日志记录类库， 在这个库中的`BufferHandler`类的`handle`函数有一段存在风险的代码
 
-​```php
+```php
 public function handle(array $record){
     //...
 	if ($this->processors) {
@@ -115,7 +115,7 @@ public function handle(array $record){
 	}
     //...
 }
-​```
+```
 
 如果`$this->processors`和`$record`均可控的话，就可以造成一个命令执行，所以我们可以序列化这个类构造`POP`链
 
@@ -125,7 +125,7 @@ public function handle(array $record){
 
 我们利用之前介绍过的[PHARGCC](https://github.com/s-n-t/phpggc)工具生成一个包含`POP`链的`phar`文件，选择`Monolog/RCE1`，看一下这个`gadget`的使用
 
-​```shell
+```shell
 > pharggc -i Monolog/RCE1
 Name           : Monolog/RCE1
 Version        : 1.18 <= 1.23
@@ -133,14 +133,14 @@ Type           :
 Vector         : __destruct
 
 ./pharggc Monolog/RCE1 <code>
-​```
+```
 
 生成一个`out.phar`，并重命名成`out.png`
 
-​```shell
+```shell
 > pharggc Monolog/RCE1 "phpinfo();"
 Payload written to: out.phar
-​```
+```
 
 然后通过`http://host/admin-rename/filemanager/dialog.php`上传到服务器上
 
