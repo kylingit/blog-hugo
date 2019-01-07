@@ -89,7 +89,7 @@ Tag功能更加复杂，操作`navbar`模板，使用时有这么几个选项可
 
 我们先用`-tag`指定一个`tag URL`
 
-![tag](http://ob5vt1k7f.qnssl.com/yProo)
+![tag](https://blog-1252261399.cos.ap-beijing.myqcloud.com/images/yProo)
 
 base64解码后的代码长这样
 
@@ -98,8 +98,11 @@ base64解码后的代码长这样
 当我们访问文章页面`http://127.0.0.1/vb3/showthread.php?p=1`或访问私信链接`http://127.0.0.1/vb3/private.php?do=showpm&pmid=1`时，就会加载php代码，在`datastore`表生成一个“标签”——插入一个序列化后的`data`字段，类似`a:2:{i:0;i:1517970003;i:1;i:1;}`，其中最后的`i`是一个计数器，值在随机数[0,6]之间，每次访问页面时i值递减1，当i减到0时就会触发代码，向我们设置的`tag URL`发送用户名经过hex编码后的页面地址
 
 ![tag code1](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/FgW6h)
+
 ![61646d696e.html](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/pkQsP)
-![61646d696e req](http://ob5vt1k7f.qnssl.com/qmk8S)(此处便于理解换了一个tag URL，并且新建了61646d696e.html文件)
+
+![61646d696e req](https://blog-1252261399.cos.ap-beijing.myqcloud.com/images/qmk8S)
+(此处便于理解换了一个tag URL，并且新建了61646d696e.html文件)
 
 同时`tag`减至`-1`并出于等待重置状态，当我们进行`reset`操作时就会清空这条“标签”数据
 

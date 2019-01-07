@@ -115,7 +115,7 @@ $output = $renderer->renderRoot($form);
 ```
 调用`doRender()`方法
 
-![doRender](http://ob5vt1k7f.qnssl.com/6Htxw)
+![doRender](https://blog-1252261399.cos.ap-beijing.myqcloud.com/images/6Htxw)
 这个方法比较长，但是我们从中找到了几处执行`call_user_func()`的地方，先看一下第三处
 ```php
 if (isset($elements['#post_render'])) {

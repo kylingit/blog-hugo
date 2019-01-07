@@ -112,11 +112,11 @@ test
 
 - 使用`path('download/<str:filename>', views.file_download),`的情况
 
-![str](http://ob5vt1k7f.qnssl.com/EQBtS)
+![str](https://blog-1252261399.cos.ap-beijing.myqcloud.com/images/EQBtS)
 
 可以看到当我们定义url的时候如果使用了`<path:filename>`的形式，传入的包含`/`的参数会被原样接收，当作完整参数交给路由部分处理，而定义为`<str:filename>`(默认即为str)的时候，`/`不被后端接收，这时候`xx.com/download/../1/1.txt`这种路径下浏览器就根据url往上跳一级，也就是`xx.com/1/1.txt`，django收到了的请求也是如此，于是django抛出一个找不到对应页面的异常
 
-![404](http://ob5vt1k7f.qnssl.com/bZQdj)
+![404](https://blog-1252261399.cos.ap-beijing.myqcloud.com/images/bZQdj)
 
 Django2.0的url虽然更改了写法，但依然向老版本兼容，兼容的办法就是用`re_path()`方法代替`path()`方法
 
@@ -230,9 +230,9 @@ DEFAULT_CONVERTERS = {
 
 此时对应的regex值为`'[^/]+'`，也就是不匹配`'/'`
 
-![cache](http://ob5vt1k7f.qnssl.com/iVQBV)
+![cache](https://blog-1252261399.cos.ap-beijing.myqcloud.com/images/iVQBV)
 
-![converter](http://ob5vt1k7f.qnssl.com/prryr)
+![converter](https://blog-1252261399.cos.ap-beijing.myqcloud.com/images/prryr)
 最终拼接成的正则为`'^download\\/(?P<filename>[^/]+)$'`
 
 这种情况下由于不匹配`/`我们就无法传入`../`之类的字符串，也就不能穿越目录

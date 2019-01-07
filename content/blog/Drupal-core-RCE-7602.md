@@ -137,7 +137,7 @@ https://github.com/drupal/drupal/commit/080daa38f265ea28444c540832509a48861587d0
 ![patch](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/2Zhjq)
 其中一个重要操作就是对`destination`参数进行了净化
 
-![cleanDestination](http://ob5vt1k7f.qnssl.com/CaZPF)
+![cleanDestination](https://blog-1252261399.cos.ap-beijing.myqcloud.com/images/CaZPF)
 
 #### 0x07 总结
 总的来说这个漏洞是CVE-2018-7600的另一个利用点，只是入口方式不一样，最终执行点还是相同的，所以还是那句话，一旦参数可控并且没有经过正确的过滤，就很有可能出问题。
