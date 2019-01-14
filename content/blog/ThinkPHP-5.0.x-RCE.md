@@ -17,11 +17,11 @@ categories: Security
 
 ### 0x02 影响版本
 
-> 5.0.x ~ 5.0.23
+> ThinkPHP 5.0.x ~ 5.0.23
 
 ### 0x03 环境搭建
 
-选择`5.0.22`版本进行复现分析
+选择`5.0.22`完整版进行复现分析
 
 ### 0x04 漏洞分析
 
@@ -43,17 +43,21 @@ App::run()->send();
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190112152929.png)
 
-可以看到在进入`self::exec($dispatch, $config)`前，`$dispatch`的值是通过`$dispatch = self::routeCheck($request, $config)`设置的，先进入`exec()`方法看一下：
+可以看到在进入`self::exec($dispatch, $config)`前，`$dispatch`的值是通过
+
+`$dispatch = self::routeCheck($request, $config)`
+
+设置的，这时候如果`debug`模式开启，就会调用`$request->param()`，也就是下面`exec()`中会调用到的函数，经过下面分析就能发现，在`debug`模式开启时就能直接触发漏洞，原理是一样的。
+
+进入`exec()`方法看一下：
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190112153147.png)
 
 `exec()`方法根据`$dispatch`的值选择进入不同的分支，当进入`method`分支时，调用`Request::instance()->param()`方法，跟进`param()`，看到调用了`Request`类的`method()`方法 ：
 
-```php
-$method = $this->method(true);
-```
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190114120946.png)
 
-其中`method()`方法就是补丁修改的位置，在这个方法中，如果`method`等于`true`，则调用`$this->server()`方法：：
+其中`method()`方法就是补丁修改的位置，在这个方法中，如果`method`等于`true`，则调用`$this->server()`方法：
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190112153449.png)
 
@@ -65,9 +69,13 @@ $method = $this->method(true);
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190112154923.png)
 
-而`filterValue()`则调用了`call_user_func()`方法，如果两个参数均可控，则会造成命令执行：
+而`filterValue()`则调用了`call_user_func()`函数，如果两个参数均可控，则会造成命令执行：
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190112175411.png)
+
+此时的调用栈如下：
+
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190114104035.png)
 
 回头看一下`$filter`和`$value`参数从哪里来：
 
@@ -99,7 +107,7 @@ $filter = $filter ?: $this->filter;
 $dispatch = self::routeCheck($request, $config);
 ```
 
-`$dispatch` 的值通过`routeCheck()`方法设置，根据routeCheck()方法：
+`$dispatch` 的值通过`routeCheck()`方法设置，跟进`routeCheck()`方法：
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190112155407.png)
 
@@ -153,9 +161,23 @@ $dispatch = self::routeCheck($request, $config);
 
 
 
-### 0x06 总结
+### 0x06 流程图
 
-这个漏洞本质上是一个覆盖漏洞，通过`_method`覆盖了配置文件的`_method`，导致可以访问`Request`类的任意函数，而在`Request`的构造函数中又创建了恶意的成员变量，导致后面的命令执行，整个漏洞利用可以说是非常巧妙了。
+整个漏洞的调用流程图如下所示：
+
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190114113839.png)
+
+### 0x07 补丁分析
+
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190114134401.png)
+
+在`5.0.24`的更新[补丁](https://github.com/top-think/framework/commit/4a4b5e64fa4c46f851b4004005bff5f3196de003)中，限制了`$this->method`为`GET`，`POST`，`DELETE`，`PUT`，`PATCH`这几个方法，因此不能从外部传入方法名再调用`Request`类的任意方法了。
+
+
+
+### 0x08 总结
+
+这个漏洞本质上是一个变量覆盖漏洞，通过传递`_method`参数覆盖了配置文件的`_method`，导致可以访问`Request`类的任意函数，而在`Request`的构造函数中又创建了恶意的成员变量，导致后面的命令执行，整个漏洞利用可以说是非常巧妙了。
 
 
 
