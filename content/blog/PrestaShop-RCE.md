@@ -123,7 +123,7 @@ public function handle(array $record){
 
 ##### 一、生成phar文件
 
-我们利用之前介绍过的[PHARGCC](https://github.com/s-n-t/phpggc)工具生成一个包含`POP`链的`phar`文件，选择`Monolog/RCE1`，看一下这个`gadget`的使用
+我们利用之前介绍过的[PHARGGC](https://github.com/s-n-t/phpggc)工具生成一个包含`POP`链的`phar`文件，选择`Monolog/RCE1`，看一下这个`gadget`的使用
 
 ```shell
 > pharggc -i Monolog/RCE1
