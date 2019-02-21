@@ -74,7 +74,7 @@ categories: Security
 
 首先在页面裁剪图片，并点击保存
 
-![1550743458074](E:\Document\Blog\content\blog\assets\1550743458074.png)
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190221233754.png)
 
 抓取数据包：
 
