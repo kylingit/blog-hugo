@@ -146,6 +146,36 @@ meta_input[_wp_attached_file]=2019/02/admin.jpeg#../../../1/1.png
 
 这样子我们可以制作一张图片马，在主题文件夹下生成，或者指定任意目录，被`include`后即可造成代码执行。
 
+### 0x04 关于mkdir
+
+在漏洞调试过程中最后一步`$editor->save( $dst_file )`过程，最终执行到的是`wp_mkdir_p()`方法中的`mkdir`函数
+
+```php
+mkdir( $target, $dir_perms, true)
+```
+
+关于`mkdir()`函数，需要注意的是`mode`参数和`recursive`参数，分别代表了创建的文件夹权限和是否递归创建，这两个参数的不同导致在`Linux`平台和`Windows`平台的结果不一致
+
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190222093526.png)
+
+在上面漏洞链中，进入最终`mkdir()`的参数是这样的
+
+```php
+mkdir( 'D:\phpStudy\PHPTutorial\WWW\wordpress-4.9.8/wp-content/uploads/2019/02/admin.jpeg?../../../1', 511, true)
+```
+
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190222094608.png)
+
+单独把`path`拿出来测试，在第三个参数`recursive`分别为`true`和`false`时，测试结果如下
+
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190222095108.png)
+
+这里导致结果不一致是因为Windows下文件夹对`?`的处理，当指定递归创建模式时，系统会尝试创建名为`admin.jpeg?..`的目录，又因为Windows下的目录不能含有`?`，因此`recursive=true`时是创建失败的，导致`wordpress`最终生成图片也无法成功。而在Linux下可以没有`?`的限制，`payload`可以成功触发。
+
+要想在`Windows`下利用漏洞，一个技巧是利用`#`字符，`#`在`url`中表示为网页位置指定标识符，只在浏览器中起作用，对解析资源时是忽略后面的字符的，因此在`wordpress`中两个方式尝试获取图片资源时同样会出现不一致，导致漏洞产生。
+
+
+
 ### 0x04 PoC
 
 见上面分析
