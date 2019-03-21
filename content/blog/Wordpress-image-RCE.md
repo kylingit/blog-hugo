@@ -196,13 +196,16 @@ $this->image->readImage( $filename );
 
 复现：
 
-1. 上传图片，更新描述信息并保存，抓包修改`meta_input[_wp_attached_file]`，目录穿越至当前主题文件夹
+1.上传图片，更新描述信息并保存，抓包修改`meta_input[_wp_attached_file]`，目录穿越至当前主题文件夹
+
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190226172313.png)
 
-2. 裁剪图片并在主题文件夹下生成裁剪后图片
+2.裁剪图片并在主题文件夹下生成裁剪后图片
+
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190226173532.png)
 
-3. 上传一个附件，更新描述信息并抓包，修改`meta_input[_wp_page_template]`，加载模板的时候自动包含该图片，代码执行成功
+3.上传一个附件，更新描述信息并抓包，修改`meta_input[_wp_page_template]`，加载模板的时候自动包含该图片，代码执行成功
+
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190226171510.png)
 
 
@@ -239,7 +242,7 @@ mkdir( 'D:\phpStudy\PHPTutorial\WWW\wordpress-4.9.8/wp-content/uploads/2019/02/a
 
 见上面分析
 
-### 0x0 7 总结
+### 0x07 总结
 
 在分析过程中踩了不少坑，每一个都浪费了不少时间，简单记录避免再次踩中。主要的有这么几个：
 
