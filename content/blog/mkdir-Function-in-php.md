@@ -3,6 +3,7 @@ title: 对PHP中的mkdir()函数的研究
 date: 2019-03-20 15:27:20
 tags: [php, kernel, debug]
 categories: Research
+notoc: false
 ---
 
 <script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
@@ -130,7 +131,7 @@ if (!expand_filepath_with_mode(dir, buf, NULL, 0, CWD_EXPAND )) {
 
 ### 0x05 深入
 
-现在清楚了`php`对`mkdir()`的实现，之所以结果不一样是因为`ZTS`与`NTS`下的两种不同的处理流程，那么为什么在TS模式下，在调用`Windows`的`API`创建目录之前，需要设置一个“虚拟目录”呢？
+现在清楚了`php`对`mkdir()`的实现，之所以结果不一样是因为`ZTS`与`NTS`下的两种不同的处理流程，那么为什么在`ZTS`模式下，在调用`Windows`的`API`创建目录之前，需要设置一个“虚拟目录”呢？
 
 这里涉及到`php`内核中的`TSRM`机制，也就是`线程安全资源管理器(Thread Safe Resource Manager)` ，这个机制的引入是为了解决线程并发的问题，我们知道，如果线程访问的内存地址空间相同，当一个线程修改资源时会影响其它线程，所以为了确保不会出现资源竞争，`php`将多个资源复制为多份，每个线程需要的资源在当前进程空间中各有一份，各取所取，这样就不会出现竞争问题。
 
@@ -160,6 +161,8 @@ if (!expand_filepath_with_mode(dir, buf, NULL, 0, CWD_EXPAND )) {
 参考：
 
 http://php.net/manual/en/function.mkdir.php
+
+http://blog.codinglabs.org/articles/zend-thread-safety.html
 
 https://segmentfault.com/a/1190000010004035
 
