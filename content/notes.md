@@ -7,11 +7,9 @@ categories: Writing
 <script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/pangu.js"></script>
 
 * * *
-不知道为什么首页文章排序不按照发布日期排序，而且如果发布时间是当天的话无法生成html页面，需要把时间往前改才行，很奇怪
-
-事实证明是hugo版本导致的...换成0.19版本问题解决
-<div align = right>2018-01-12</div>
-* * *
+![](https://cdn.eso.org/images/screen/eso1907a.jpg)
+![](https://img.fireden.net/v/image/1493/19/1493190289591.png)
+<div align = right>2019-04-10</div>
 * * *
 阿廖沙，不要怕！火车在上面停下啦！他一笑天就亮啦！
 <div align = right>2017-05-16</div>
