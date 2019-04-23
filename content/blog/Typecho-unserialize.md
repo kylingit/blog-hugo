@@ -1,7 +1,7 @@
 ---
 title: Typecho install.php 反序列化漏洞分析
 date: 2017-10-30 14:32:18
-tags: [反序列化,漏洞分析,php]
+tags: [unserialize,vul,php]
 categories: Security
 ---
 <script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
