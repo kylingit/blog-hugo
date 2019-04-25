@@ -10,7 +10,9 @@ categories: Security
 
 ### 0x01 概述
 
-3月20日，Drupal官方发布SA-CORE-2019-004漏洞预警，修复了一处处理文件名异常，官方描述为中危，因为该漏洞需要作者权限来上传文件
+3月20日，Drupal官方发布`SA-CORE-2019-004`漏洞预警，修复了一处文件名处理异常，当我们上传特殊文件名时可以绕过限制在服务器上创建“无后缀”文件，精心构造的文件经过浏览器解析后可以触发XSS漏洞，再进一步可以达到代码执行的目的。
+
+官方描述该漏洞为中危影响，因为该漏洞需要登录，并且需要作者权限来上传文件才能触发。
 
 详细参考：<https://www.drupal.org/sa-core-2019-004>
 
@@ -20,7 +22,7 @@ categories: Security
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190422165341.png)
 
-该方法的主要功能是将返回上传文件的路径，返回形如`public://2019-04/1.png`的路径，然后由`drupal`自身实现的方法将`public://`路径转换为相对路径。问题出在这行处理`utf-8`编码的代码上
+该方法的主要功能是处理上传文件的路径，返回形如`public://2019-04/1.png`的路径，然后由`drupal`自身实现的方法将`public://`路径转换为相对路径。如果文件系统已经存在同名文件，则在文件名会追加`_0`, `_1`。问题出在这行处理`utf-8`编码的代码上
 
 `$basename = preg_replace('/[\x00-\x1F]/u', '_', $basename);`
 
@@ -46,7 +48,7 @@ if (file_exists($destination)) {
   }
 ```
 
-在开始有一个`file_exists`判断，所以我们需要上传相同文件至少两次，才能进入`if`分支。由于`$basename`为空，`$name`也被赋值为空，接下来进入一个循环，如果文件已经存在，就把文件命名为`路径+分隔符+name+_+counter+后缀`的形式，也就是说同名文件会加上后缀`_0` `_1`等，而此时表达式的值即为`下划线+计数器`的值，于是我们在`/sites/default/files/pictures/<YYYY-MM>/`目录下得到类似`_0 _1`的无后缀文件。
+在开始有一个`file_exists`判断，所以我们需要上传相同文件至少两次，才能进入`if`分支。由于`$basename`为空，`$name`也被赋值为空，接下来进入一个循环，如果文件已经存在，就把文件命名为`路径+分隔符+name+_+counter+后缀`的形式，也就是同名文件会被加上后缀`_0` `_1`等，而此时表达式的值即为`下划线+计数器`的值，于是我们在`/sites/default/files/pictures/<YYYY-MM>/`目录下得到类似`_0 _1`的无后缀文件。
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190422171620.png)
 
@@ -75,19 +77,19 @@ if (file_exists($destination)) {
 - 纯HTML文件无后缀，浏览器可以解析，但是无法上传；
 - 增加图片文件头，可以上传，但是浏览器不能解析；
 
-于是现在陷入一个尴尬境地，需要找个另外的点。
+于是现在陷入一个两难境地，需要找个另外的点。
 
 #### 突破
 
-我们注意到在`新建文章`页面除了上传图片外，还有一个编辑器内置的图片上传接口，这个接口是否可以上传html呢
+我们注意到在`新建文章`页面除了上传图片外，还有一个编辑器内置的图片上传接口，从这个接口分析一下
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190423111342.png)
 
-跟入分析一下，之前的流程都是一样的，同样会进入`file_validate()`方法，同样检测文件合法性，但是此时的`$validators`有所不一样：
+跟入相关方法，之前的流程都是一样的，同样会进入`file_validate()`方法，同样检测文件合法性，但是此时的`$validators`有所不一样：
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190423111805.png)
 
-`file_validate_is_image`变成了`file_validate_image_resolution`，这个方法是检测图片是否符合大小，但是对于非图片文件...直接忽略了，返回一个空数组
+`file_validate_is_image`变成了`file_validate_image_resolution`，这个方法是检测图片是否符合大小，但是对于非图片文件会直接忽略，返回一个空数组
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190423113048.png)
 
@@ -99,11 +101,11 @@ if (file_exists($destination)) {
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190423113606.png)
 
-现在可以利用这个漏洞上传一个html文件，攻击面就扩大了许多，简单的可以是一个XSS，复杂的可以是个钓鱼页面(这个漏洞需要作者权限，故可以钓鱼管理员)，再进一步，如何进行命令执行甚至直接反弹一个shell呢？
+现在可以利用这个漏洞上传一个html文件，攻击面就扩大了许多，简单的可以是一个XSS，复杂的可以是个钓鱼页面(这个漏洞需要作者权限，故可以钓鱼管理员)，再进一步，如何进行命令执行甚至反弹一个shell呢？
 
 #### 组合拳
 
-联想到1月份Drupal官方修复的[SA-CORE-2019-002](https://www.drupal.org/sa-core-2019-002)漏洞，文件操作函数处理`phar`文件时反序列化形成代码执行漏洞，在此处正好可以用上。phar反序列化风险影响几乎所有文件操作函数，而在Drupal中`File system`功能就存在这个缺陷，在设置本地临时文件夹的时候会进行路径检查，相关方法是`system_check_directory()`
+联想到1月份Drupal官方修复的[SA-CORE-2019-002](https://www.drupal.org/sa-core-2019-002)漏洞，文件操作函数处理`phar`文件时会触发反序列化形成代码执行漏洞，在此处正好可以用上。`phar`反序列化风险影响几乎所有文件操作函数，而在Drupal中`File system`功能就存在这个缺陷，在设置本地临时文件夹的时候会进行路径检查，相关方法是`system_check_directory()`
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190423135902.png)
 
@@ -111,7 +113,9 @@ if (file_exists($destination)) {
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190423140328.png)
 
-那么现在的思路是，上传一个`phar`文件，诱使管理员点击链接把临时文件路径设置为`phar://test.phar`触发漏洞反弹shell
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190425174400.png)
+
+因此现在的思路是，上传一个`phar`文件，诱使管理员点击链接把临时文件路径设置为`phar://test.phar`触发漏洞反弹shell
 
 ### 0x04 漏洞利用
 
@@ -124,7 +128,7 @@ if (file_exists($destination)) {
 
 1. 生成一个能反弹shell的phar文件；
 
-    Drupal反序列化的POP链已经比较多了，可以参考[这里](https://kylingit.com/blog/%E7%94%B1phpggc%E7%90%86%E8%A7%A3php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/)
+    Drupal反序列化的POP链已经比较多了，可以参考这里[由 PHPGGC 理解 PHP 反序列化漏洞](https://kylingit.com/blog/%E7%94%B1phpggc%E7%90%86%E8%A7%A3php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/)
 
     选择`GuzzleHttp\Psr7`类，使用[PHARGGC](https://kylingit.com/blog/%E7%94%B1phpggc%E7%90%86%E8%A7%A3php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/)直接生成phar文件
 
@@ -136,15 +140,15 @@ if (file_exists($destination)) {
 
     `http://127.0.0.1/drupal-8.6.5/sites/default/files/inline-images/phar.png`
 
-3. 生成一个html文件；
+3. 生成一个html文件
 
-    这个html文件需要让管理员打开链接时自动发送请求来修改临时文件路径，与`CSRF`非常相似，所以直接使用`burpsuite`抓个包生成`CSRF PoC`
+    这个html文件需要让管理员打开链接时自动发送请求来修改临时文件路径，与`CSRF`非常相似，所以直接使用`burpsuite`抓包生成`CSRF PoC`
 
     ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190423150512.png)
 
     
 
-    然后我们增加一个自动点击提交表单的操作，省去手动submit
+    然后增加一个自动点击提交表单的操作，省去手动submit
 
     ```html
     <script type="text/javascript">
@@ -155,7 +159,7 @@ if (file_exists($destination)) {
 
     
 
-4. 再通过编辑器的接口上传这个html文件，修改文件名的`ascii`值大于128。**注意需要上传至少两次**，以生成`_0、_1`文件
+4. 再通过编辑器的接口上传这个html文件，修改文件名的`ascii`值大于128。**注意需要上传至少两次**，以生成`_0`、`_1`文件
 
     ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190423153014.png)
 
@@ -165,13 +169,13 @@ if (file_exists($destination)) {
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190423153510.png)
 
-这里因为反弹shell会把页面卡住，可以增加一个跳转首页，这样可以更隐蔽
+这里因为反弹shell会把页面卡住，可以增加一个跳转首页，更隐蔽地触发漏洞。
 
 
 
 ### 0x05 总结
 
-这个漏洞由一个`preg_replace()`引起的，没有正确处理异常，导致可以上传“任意”文件，结合phar反序列化漏洞组合成一条漂亮的攻击链，值得学习。
+这个漏洞由一个`preg_replace()`引起，由于没有正确处理异常，导致可以上传“任意”文件；而`phar`反序列化漏洞在一年前就已经公布了，把几个漏洞组合在一起形成一条漂亮的攻击链，值得学习。站在管理员角度应该关注安全更新，及时更新应用，而对于开发者来说也要重视安全风险，不可忽视任何一处不起眼的安全隐患。
 
 
 
