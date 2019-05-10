@@ -236,7 +236,17 @@ mkdir( 'D:\phpStudy\PHPTutorial\WWW\wordpress-4.9.8/wp-content/uploads/2019/02/a
 
 这里导致结果不一致是因为Windows下文件夹对`?`的处理，当指定递归创建模式时，系统会尝试创建名为`admin.jpeg?..`的目录，又因为Windows下的目录不能含有`?`，因此`recursive=true`时是创建失败的，导致`wordpress`最终生成图片也无法成功。而在Linux下可以没有`?`的限制，`payload`可以成功触发。
 
+
 要想在`Windows`下利用漏洞，一个技巧是利用`#`字符，`#`在`url`中表示为网页位置指定标识符，只在浏览器中起作用，对解析资源时是忽略后面的字符的，因此在`wordpress`中两个方式尝试获取图片资源时同样会出现不一致，导致漏洞产生。
+
+**更新：**此处是否检查`?`等不合法字符与`php`的线程安全模式相关，具体如下。
+
+|       Windows       |   **thread-safe**   | **non-thread safe** |
+| :-----------------: | :-----------------: | :-----------------: |
+| **recursive=false** |   fail (No error)   |     **success**     |
+| **recursive=true**  | fail (Invalid path) | fail (Invalid path) |
+
+关于这块的详细分析可以参考 [对PHP中的mkdir()函数的研究](https://kylingit.com/blog/%E5%AF%B9php%E4%B8%AD%E7%9A%84mkdir%E5%87%BD%E6%95%B0%E7%9A%84%E7%A0%94%E7%A9%B6/)
 
 ### 0x06 PoC
 
