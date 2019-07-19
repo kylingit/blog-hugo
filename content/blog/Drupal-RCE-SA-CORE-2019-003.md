@@ -151,6 +151,12 @@ root@localhost:/opt/phpggc# ./phpggc guzzle/rce1 assert 'phpinfo()' -j
 
 ![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/20190223111019.png)
 
+**注意：**如果返回码为422且报下面这个错误，尝试在`/admin/config/development/performance`点击清除缓存
+
+`{"message":"Type http:\/\/127.0.0.1\/drupal-8.6.5-1\/rest\/type\/shortcut\/default does not correspond to an entity on this site."}`
+
+另外尝试用`PoC`脚本利用，每篇文章对应的`node id`利用一次就失效了，再次利用需要换一个`node id`，暂时没有研究为什么。
+
 ### 0x06 总结
 
 这个漏洞触发点并不复杂，但是调用链相当深，利用条件则是开启了`REST Web services`，并且允许用户通过`rest api`注册，在一些功能比较齐全的站点或者方便插件调用时可能会开启，影响面减小了不少，但并不影响这依然是个非常巧妙的漏洞，也进一步说明了开发时考虑不周全的话，风险点就在那里，被利用只是时间问题。
