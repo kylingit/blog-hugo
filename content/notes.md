@@ -7,6 +7,9 @@ categories: Writing
 <script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/pangu.js"></script>
 
 * * *
+当熵席卷所有世界和地方，除了褪色的糖纸什么也不剩，在最后一颗被恒星摧毁的行星，我将在最后枯萎的一颗树上吟唱，姐妹们将和我一起，异口同声歌唱，在永世的殿堂，用被谈论、被遗忘的歌喉发出正义的尖叫，这将是所有的造物中最后的故事，直到光线熄灭，宇宙消亡。
+<div align = right>2019-11-28</div>
+* * *
 ![](https://cdn.eso.org/images/screen/eso1907a.jpg)
 ![](https://img.fireden.net/v/image/1493/19/1493190289591.png)
 <div align = right>2019-04-10</div>
