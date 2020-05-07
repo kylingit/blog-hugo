@@ -6,7 +6,6 @@ categories: Security
 ---
 
 <script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
-
 ### 0x01 概述
 
 10月30日，研究员S00pY在GitHub发布了Apache Solr Velocity模版注入远程命令执行的poc，该漏洞通过设置资源加载属性，利用`VelocityResponseWriter`插件执行自定义模板，进而进行远程代码执行，危害较大，下面是分析过程。
