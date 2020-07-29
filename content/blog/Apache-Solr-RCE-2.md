@@ -6,6 +6,7 @@ categories: Security
 ---
 
 <script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/pangu.js"></script>
+
 ### 0x01 概述
 
 10月30日，研究员S00pY在GitHub发布了Apache Solr Velocity模版注入远程命令执行的poc，该漏洞通过设置资源加载属性，利用`VelocityResponseWriter`插件执行自定义模板，进而进行远程代码执行，危害较大，下面是分析过程。
@@ -29,7 +30,7 @@ IDEA新建远程调试即可
 
 `VelocityResponseWriter`(Velocity响应编写器)是 contrib/velocity 目录中可用的可选插件。当使用诸如 “_default”、“techproducts” 和 “example / files” 等配置时，它为浏览用户界面提供动力。
 
-必须添加它的 JAR 和依赖项（通过<lib>或 solr/home lib 包含），并且必须在 solrconfig.xml 注册，默认已经注册
+必须添加它的 JAR 和依赖项（通过\<lib\>或 solr/home lib 包含），并且必须在 solrconfig.xml 注册，默认已经注册
 
 ![1572507926900](https://blog-1252261399.cos.ap-beijing.myqcloud.com/images/1572507926900.png)
 
