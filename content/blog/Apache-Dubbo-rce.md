@@ -11,7 +11,7 @@ categories: Security
 
 ## 简介
 
-1. Dubbo 从大的层面上将是RPC框架，负责封装RPC调用，支持很多RPC协议
+1. Dubbo 从大的层面上讲是RPC框架，负责封装RPC调用，支持很多RPC协议
 
 2. RPC协议包括了dubbo、rmi、hessian、webservice、http、redis、rest、thrift、memcached、jsonrpc等
 
