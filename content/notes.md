@@ -6,16 +6,50 @@ categories: Writing
 ---
 <script src="https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/pangu.js"></script>
 
+
+***
+他伴着沉默而来  
+风儿从湖底穿过  
+拽响了树梢的月亮  
+凄惨又冷漠  
+一种的长满疙瘩果子掉到水里  
+在遥远的空旷的夜  
+惊醒了芦苇后面的黑色鲶鱼  
+因为贫瘠所以荒凉  
+因为荒凉所以那些野生的世界  
+变得更加真实  
+充满幻想充满神奇  
+他们用一种原始的恐惧  
+裹挟着孩子对新世界的未知  
+最后当太阳升起  
+光从屋檐上抬起头  
+才敢走出去  
+从昨夜发出声响的河里  
+月光清冷  
+那不可逾越的漆黑水底里面藏着什么  
+一种大人都没见过的怪物  
+还是只有大人  
+才见过的贫穷的苦难  
+
+[天真的和感伤的小说家](https://www.bilibili.com/video/BV17y4y1r7Ld)
+
+<div align = right>2020-12-15</div>
+
 * * *
 当熵席卷所有世界和地方，除了褪色的糖纸什么也不剩，在最后一颗被恒星摧毁的行星，我将在最后枯萎的一颗树上吟唱，姐妹们将和我一起，异口同声歌唱，在永世的殿堂，用被谈论、被遗忘的歌喉发出正义的尖叫，这将是所有的造物中最后的故事，直到光线熄灭，宇宙消亡。
+
 <div align = right>2019-11-28</div>
+
 * * *
-![](https://cdn.eso.org/images/screen/eso1907a.jpg)
-![](https://img.fireden.net/v/image/1493/19/1493190289591.png)
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/eso1907a.jpg)
+
 <div align = right>2019-04-10</div>
+
 * * *
 阿廖沙，不要怕！火车在上面停下啦！他一笑天就亮啦！
+
 <div align = right>2017-05-16</div>
+
 * * *
 毕业设计  
 自然有很多人是没有去实习的，理所当然也就没有实习经历  
@@ -25,18 +59,25 @@ categories: Writing
 甚至有点  
 得意？  
 感觉心里有什么东西崩塌了...  
+
 <div align = right>2017-05-04</div>
+
 * * *
 一棵树摇动一棵树  
 一朵云推动一朵云  
 一个灵魂唤醒另一个灵魂  
 <div align = right>2017-02-20</div>
+
 * * *
-![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/IMG_1141.PNG?imageMogr2/thumbnail/!50p)
+![](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/IMG_1141.PNG)
+
 <div align = right>2016-08-29</div>
+
 * * *
 我要给马丁老爷子寄刀片...٩(ŏ﹏ŏ、)۶
+
 <div align = right>2016-07-29</div>
+
 * * *
 在地铁上看到一对可爱的母女。  
 “妈妈下一站是公主坟站。”  
@@ -45,32 +86,9 @@ categories: Writing
 “公主坟下面当然是公主咯~”
 <div align = right>2016-07-26</div>
 * * *
-发现一个新的测速方法，适合VPS测速  
-Speedtest cli 测速  
-`wget -O speedtest_cli https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest_cli.py`
-`chmod +x speedtest_cli`
-
-查看国内节点 
-`./speedtest_cli --list | grep China`
-
-洛杉矶节点 
-`./speedtest_cli --server=3864 --share`
-
-上海节点 
-`./speedtest_cli --server=3633 --share`
-
-服务器列表
-`https://www.speedtest.net/speedtest-servers-static.php`
-
-截图
-
-![Untitled Image](https://blog-1252261399.cos-website.ap-beijing.myqcloud.com/images/5495426634.png)
-
-<div align = right>2016-07-20</div>
-
-* * *
 刘看山的女朋友是谁？  
 唔…
+
 <div align = right>2016-07-12</div>
 * * *
 又到了期末考试的时期了。  
@@ -80,10 +98,8 @@ Speedtest cli 测速
 "要是每天晚上都能见到这样的场景，大清就不会亡了！"  
 讲段子，哈哈大笑。做小抄，乐此不疲。  
 interesting。
+
 <div align = right>2016-06-27</div>
-* * *
-推荐WordMark编辑器，可一键部署到Github Pages，支持七牛图床，同时支持多平台。
-<div align = right>2016-06-23</div>
 * * *
 你说到最后会不会都走了，就像到站下车了，一转身尽是背影…  
 嗯…也许吧…  
@@ -91,6 +107,7 @@ interesting。
 没有不走的道理。  
 你是说我们本就不属于这里？  
 …别再想了，走吧。  
+
 <div align = right>2016-06-21</div>
 * * *
 
