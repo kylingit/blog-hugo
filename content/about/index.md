@@ -4,7 +4,8 @@ comments: false
 ---
 <script src="https://blog-1252261399.cos.ap-beijing.myqcloud.com/pangu.js"></script>
 
-<iframe src="https://open.spotify.com/embed/track/0bIGNGUqgpB82sAksxonkZ" width="750" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=750 height=80 src="https://music.163.com/outchain/player?type=2&id=31738245&auto=1&height=70"></iframe>
+
 
 # 诗与胡说，一个孤独散步者的梦
 - Web Security
@@ -15,7 +16,9 @@ comments: false
     - CVE-2020-4589    WebSphere JNDI注入漏洞 CVSS 8.1
     - CVE-2020-4643    WebSphere XXE漏洞 CVSS 7.5
     - CVE-2020-4576    WebSphere 信息泄露漏洞 CVSS 5.3
+    - CVE-2020-5016 WebSphere 目录穿越漏洞 CVSS 5.3
+    - CVE-2021-20354 WebSphere 目录穿越漏洞 CVSS 5.9
+    - CVE-2021-20480 WebSphere SSRF漏洞 CVSS 4.3
 
 <script>pangu.spacingPage();</script>
-
 
